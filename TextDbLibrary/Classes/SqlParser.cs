@@ -26,6 +26,10 @@ namespace TextDbLibrary.Classes
             List<string> selectedColumnsList = GetSelectedColumnsList(ref currPos, ref nextPos, sqlString);
             string secondStatement = GetSecondStatement(ref currPos, ref nextPos, sqlString);
             string selectedTable = GetSelectedTable(ref currPos, ref nextPos, sqlString);
+
+            // TODO - After here check if sqlString is finished.
+            // If sql is: Select * From [PersonsTbl]
+            // there will be no thirdStatement or conditionsString
             string thirdStatement = GetThirdStatement(ref currPos, ref nextPos, sqlString);
 
             var tblSet = db.Tables.Where(t => t.TableName == selectedTable).FirstOrDefault();
@@ -51,7 +55,16 @@ namespace TextDbLibrary.Classes
 
                 try
                 {
-                    bool conditionResult = new Interpreter().Eval<bool>(tmpConditionsString);
+                    bool conditionResult = false;
+
+                    if (tmpConditionsString == "")
+                    {
+                        conditionResult = true;
+                    }
+                    else
+                    {
+                        conditionResult = new Interpreter().Eval<bool>(tmpConditionsString);
+                    }
 
                     if (conditionResult)
                     {
@@ -207,7 +220,7 @@ namespace TextDbLibrary.Classes
             string secondStatement = sqlString.Substring(currPos, nextPos - currPos);
 
             currPos = nextPos;
-            nextPos = sqlString.IndexOf("] ", currPos) + 2;
+            nextPos = sqlString.IndexOf("]", currPos) + 1;
 
             return secondStatement;
         }
@@ -225,6 +238,12 @@ namespace TextDbLibrary.Classes
 
         private string GetThirdStatement(ref int currPos, ref int nextPos, string sqlString)
         {
+            // TODO - better solution, use a ref bool to check after selected table if the string is finshed?
+            if (currPos + (nextPos - currPos) > sqlString.Length || currPos + (nextPos - currPos) <= 0)
+            {
+                return "";
+            }
+
             string thirdStatement = sqlString.Substring(currPos, nextPos - currPos);
 
             currPos = nextPos;
@@ -235,6 +254,12 @@ namespace TextDbLibrary.Classes
 
         private string GetConditionsString(ref int currPos, ref int nextPos, string sqlString)
         {
+            // TODO - better solution, use a ref bool to check after selected table if the string is finshed?
+            if (currPos + (nextPos - currPos) > sqlString.Length || currPos + (nextPos - currPos) <= 0)
+            {
+                return "";
+            }
+
             string conditionsString = sqlString.Substring(currPos, nextPos - currPos).Trim();
             conditionsString = conditionsString.Replace("'", "\"");
 
