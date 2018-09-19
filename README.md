@@ -19,6 +19,8 @@ You can use simple relationships. A column can hold relationship to one or many.
 When you delete a row in the database it will delete the reletionships of that entity
 with that id in the other tables also.
 
+It loads the entities relationships automatically with use of the table schema and reflection.
+
 I built in functionality to parse some **really basic** sql statements to the database.
 You can parse a **Select From Where** statement and get the result back in a DataSet.
 
