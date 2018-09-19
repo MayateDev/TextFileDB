@@ -5,12 +5,16 @@ The project TextFileDb is the heart of this repository, the rest is just demo
 code i have set up to test the library.
 
 # Usage
-The library has a class TextDbSchema that you inherit from and in there you set up
-your table models with help of different classes.
+The library has a class TextDbSchema that you inherit from and in that class you set up
+your table models with help of different classes and interfaces.
 
-To see example of how this works you can look at the demo file DbContext file in the 
+To see example of how this is setup look at the demo DbContext file in the 
 DataLibrary. There is also a generic repository and interface to inherit from in the 
 "Repositories" and "Interfaces" folders.
+
+When you have made your tables and setup the initializing methods for the TextFileDb
+it will create the files needed, if they dont exist, and update what needs to be updated
+in the TextDbInfo.tdb file.
 
 You can then new up a DbContext and get data from your tables with help of extension 
 methods in the TextFileDb library.
@@ -41,7 +45,8 @@ Select * From [PersonTbl]
 ```
 
 The library creates a json file over the database schema, but this file looks a little bit
-wonky, will have to look more in to this, never worked with json before.
+wonky, will have to look more in to this, never worked with json before. This file is generated
+mostly for fun as a test at the moment.
 
 The library also creates a TextDbInfo.tdb that contains the current primary key for each table
 and info about the columns on the tables.
@@ -134,6 +139,11 @@ db.PersonsTbl.AddEntities(entityList);
 # Bugs
 Yes. Probably alot at the moment. Have not cared to much about error handling and 
 user input controls yet.
+
+I expect many issues if columns are added to tables when database file for that table
+already exists. There is no function to fix this as it is right now.
+
+This
 
 # Credits
 I have to give some credits to [**Tim Corey**](https://www.youtube.com/user/IAmTimCorey/featured). I got the idea to make this library watching
