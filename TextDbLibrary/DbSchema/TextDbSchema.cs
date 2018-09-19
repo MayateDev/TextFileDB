@@ -21,17 +21,7 @@ namespace TextDbLibrary.DbSchema
         public TextDbSchema()
         {
             Tables = SchemaTables;
-            //TextDbTableActions.EntityDeletedFromFileEvent += TextDbTableActions_EntityDeletedFromFileEvent;
         }
-
-        ///// <summary>
-        ///// Constructor for our TextDbSchema
-        ///// </summary>
-        ///// <param name="tables">List of all the tables in the database (IDbTableSet)</param>
-        //public TextDbSchema(List<IDbTableSet> tables)
-        //{
-        //    SchemaTables = tables;
-        //}
 
         /// <summary>
         /// A private static List of IDbTableSet where we instanciate all our tables
