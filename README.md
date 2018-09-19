@@ -33,13 +33,18 @@ Select [Id], [FirstName], [LastName] From [PersonTbl] Where [FirstName] == 'Robe
 Select * From [PersonTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
 ```
 
+**This will give you a DataSet with all the columns and all the rows in a table.**
+```SQL
+Select * From [PersonTbl]
+```
+
 The library creates a json file over the database schema, but this file looks a little bit
 wonky, will have to look more in to this, never worked with json before.
 
 The library also creates a TextDbInfo.tdb that contains the current primary key for each table
 and info about the columns on the tables.
 
-It looks a ittle bit like this:
+It looks a little bit like this:
 ```
 <![DbInfo]>
     <Tables Count=3>
