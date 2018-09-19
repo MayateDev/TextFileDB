@@ -12,3 +12,17 @@ C:\WebProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.pdb
 C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.dll
 C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.pdb
 C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.xml
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\DataLibrary.dll
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\DataLibrary.pdb
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\TextDbLibrary.dll
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.dll
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\TextDbLibrary.pdb
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.pdb
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.xml
+C:\GitProjects\TextFileDB\DataLibrary\bin\Debug\Newtonsoft.Json.xml
+C:\GitProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.csprojAssemblyReference.cache
+C:\GitProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.csproj.CoreCompileInputs.cache
+C:\GitProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.csproj.CopyComplete
+C:\GitProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.dll
+C:\GitProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.pdb

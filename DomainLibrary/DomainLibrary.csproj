@@ -49,6 +49,7 @@
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\TournamentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ParseSqlStringViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TextDbLibrary\TextDbLibrary.csproj">

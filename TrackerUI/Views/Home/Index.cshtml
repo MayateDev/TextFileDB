@@ -1,28 +1,32 @@
-﻿@using System.Data
-@model DataSet
+﻿@using DomainLibrary.ViewModels
+@model ParseSqlStringViewModel
 @{
     ViewBag.Title = "Home Page";
-    string[] columnNames = Model.Tables[0].Columns.Cast<DataColumn>()
-                                 .Select(x => x.ColumnName)
-                                 .ToArray();
 }
 <br />
-
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <span>Sql string: </span>
+    @Html.TextBoxFor(m => m.SqlString)
+}
 <br />
+@if (Model != null && Model.QueryDataSet != null && Model.QueryDataSet.Tables[0].Rows.Count > 0)
+{
 <table cellpadding="20" cellspacing="2" border="1">
     <tr>
-        @foreach (var c in columnNames)
+        @foreach (var c in Model.ColumnNames)
         {
             <th>@c</th>
         }
     </tr>
-    @for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+    @for (int i = 0; i < Model.QueryDataSet.Tables[0].Rows.Count; i++)
     {
         <tr>
-        @foreach (var c in columnNames)
+        @foreach (var c in Model.ColumnNames)
         {
-            <td>@Model.Tables[0].Rows[i][c]</td>
+            <td>@Model.QueryDataSet.Tables[0].Rows[i][c]</td>
         }
         </tr>
     }
 </table>
+}

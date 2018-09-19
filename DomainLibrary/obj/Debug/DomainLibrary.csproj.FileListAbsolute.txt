@@ -16,3 +16,17 @@ C:\WebProjects\TextFileDB\DomainLibrary\obj\Debug\DomainLibrary.csproj.CopyCompl
 C:\WebProjects\TextFileDB\DomainLibrary\bin\Debug\DynamicExpresso.Core.dll
 C:\WebProjects\TextFileDB\DomainLibrary\bin\Debug\DynamicExpresso.Core.pdb
 C:\WebProjects\TextFileDB\DomainLibrary\bin\Debug\DynamicExpresso.Core.xml
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\DomainLibrary.dll
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\DomainLibrary.pdb
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\TextDbLibrary.dll
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\DynamicExpresso.Core.dll
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\TextDbLibrary.pdb
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\DynamicExpresso.Core.pdb
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\DynamicExpresso.Core.xml
+C:\GitProjects\TextFileDB\DomainLibrary\bin\Debug\Newtonsoft.Json.xml
+C:\GitProjects\TextFileDB\DomainLibrary\obj\Debug\DomainLibrary.csprojAssemblyReference.cache
+C:\GitProjects\TextFileDB\DomainLibrary\obj\Debug\DomainLibrary.csproj.CoreCompileInputs.cache
+C:\GitProjects\TextFileDB\DomainLibrary\obj\Debug\DomainLibrary.csproj.CopyComplete
+C:\GitProjects\TextFileDB\DomainLibrary\obj\Debug\DomainLibrary.dll
+C:\GitProjects\TextFileDB\DomainLibrary\obj\Debug\DomainLibrary.pdb

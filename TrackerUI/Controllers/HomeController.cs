@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using DomainLibrary.Models;
+using DomainLibrary.ViewModels;
 using TextDbLibrary.Classes;
 using TextDbLibrary.DbSchema;
 using TextDbLibrary.Extensions;
@@ -56,12 +58,25 @@ namespace TrackerUI.Controllers
 
             //// SqlParser - Send a basic sqlstring and get a DataSet back with the results
             
-            var sqlString = "Select [FirstName], [LastName] From [PersonsTbl] Where [Id] != 4";
-            var results = _sqlParser.ParseSql(sqlString);
+            //var sqlString = "Select [FirstName], [LastName] From [PersonsTbl] Where [Id] != 4";
+            //var results = _sqlParser.ParseSql(sqlString);
 
-            var teams = _teamService.List();
+            //var teams = _teamService.List();
 
-            return View(results);
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(ParseSqlStringViewModel model)
+        {
+            var results = _sqlParser.ParseSql(model.SqlString);
+
+            model.QueryDataSet = results;
+            model.ColumnNames = results.Tables[0].Columns.Cast<DataColumn>()
+                                    .Select(x => x.ColumnName)
+                                    .ToArray();
+
+            return View(model);
         }
     }
 }
