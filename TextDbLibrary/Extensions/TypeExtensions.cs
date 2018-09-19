@@ -16,6 +16,7 @@ namespace TextDbLibrary.Extensions
     {
         /// <summary>
         /// Returns a filepath from filename string
+        /// From Tim Coreys YouTube channel
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -26,6 +27,7 @@ namespace TextDbLibrary.Extensions
 
         /// <summary>
         /// Loads file from filepath and reads it to List<string>
+        /// From Tim Coreys YouTube channel 
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
