@@ -21,37 +21,25 @@ with that id in the other tables also.
 
 # Examples
 
-var db = new DbContext();
+<b>var db = new DbContext();</b>
 
-- Add entity, returns entity with new id
-
-db.PersonsTbl.Add(entity);
-
-
-- Read entity by id
-
-db.PersonsTbl.Read<Person>(1);
-
-
-- Update entity, returns entity
-
-db.PersonsTbl.Update(entity);
-
-
-- Delete entity, relations to this entity will be deleted as well
-
-db.PersonTbl.Delete(entity);
-
-
-- List all<br>
-
-db.PersonsTbl.List<Person>();
-
-
-- AddEntities, add a list<entity> to the database
-
-db.PersonsTbl.AddEntities(entityList);
-
-
+- Add entity, returns entity with new id =><br/>
+<b>db.PersonsTbl.Add(entity);</b><br/>
+<br/>
+- Read entity by id =><br/>
+<b>db.PersonsTbl.Read<Person>(1);</b><br/>
+<br/>
+- Update entity, returns entity => <br/>
+<b>db.PersonsTbl.Update(entity);</b><br/>
+<br/>
+- Delete entity, relations to this entity will be deleted as well => <br/>
+<b>db.PersonTbl.Delete(entity);</b><br/>
+<br/>
+- List all<br><br/>
+<b>db.PersonsTbl.List<Person>();</b><br/>
+<br/>
+- AddEntities, add a list<entity> to the database<br/>
+<b>db.PersonsTbl.AddEntities(entityList);</b><br/>
+<br/>
 # More info to come...
 Feel free to involve yourself in this if you want :)
