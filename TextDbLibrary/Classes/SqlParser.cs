@@ -195,12 +195,13 @@ namespace TextDbLibrary.Classes
             }
         }
 
+        // TODO - IndexOf(" F") <- what if IndexOf(" f"). 
         private string GetFirstStatement(ref int currPos, ref int nextPos, string sqlString)
         {
             string firstStatement = sqlString.Substring(currPos, nextPos);
 
             currPos = nextPos;
-            nextPos = sqlString.IndexOf(" F", currPos) + 1;
+            nextPos = sqlString.IndexOf(" F", currPos);// + 1;
 
             return firstStatement;
         }
@@ -220,7 +221,7 @@ namespace TextDbLibrary.Classes
             string secondStatement = sqlString.Substring(currPos, nextPos - currPos);
 
             currPos = nextPos;
-            nextPos = sqlString.IndexOf("]", currPos) + 1;
+            nextPos = sqlString.IndexOf("]", currPos);// + 1;
 
             return secondStatement;
         }
