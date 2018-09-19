@@ -1,0 +1,14 @@
+C:\WebProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.csprojAssemblyReference.cache
+C:\WebProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.csproj.CoreCompileInputs.cache
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DataLibrary.dll
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DataLibrary.pdb
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\TextDbLibrary.dll
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\TextDbLibrary.pdb
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\Newtonsoft.Json.xml
+C:\WebProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.csproj.CopyComplete
+C:\WebProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.dll
+C:\WebProjects\TextFileDB\DataLibrary\obj\Debug\DataLibrary.pdb
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.dll
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.pdb
+C:\WebProjects\TextFileDB\DataLibrary\bin\Debug\DynamicExpresso.Core.xml

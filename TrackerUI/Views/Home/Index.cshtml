@@ -1,0 +1,26 @@
+﻿@using System.Data
+@model DataSet
+@{
+    ViewBag.Title = "Home Page";
+    string[] columnNames = Model.Tables[0].Columns.Cast<DataColumn>()
+                                 .Select(x => x.ColumnName)
+                                 .ToArray();
+}
+<br />
+<table cellpadding="20" cellspacing="2" border="1">
+    <tr>
+        @foreach (var c in columnNames)
+        {
+            <th>@c</th>
+        }
+    </tr>
+    @for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+    {
+        <tr>
+        @foreach (var c in columnNames)
+        {
+            <td>@Model.Tables[0].Rows[i][c]</td>
+        }
+        </tr>
+    }
+</table>
