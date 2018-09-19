@@ -1,7 +1,7 @@
 # TextFileDB - Under development
 A lightweight library for setting up and running a textfile database.
 
-The project TextFileDb is the heart of this repository, the rest is just demo
+The project TextFileDb is the beating heart of this repository, the rest is just demo
 code i have set up to test the library.
 
 # Usage
