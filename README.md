@@ -149,7 +149,8 @@ one of his videos on youtube where he built an application using text files as a
 i wanted to try to make something like that but more generic, that is somewhat scaleable and reusable
 and has a little more functions.
 
-I took the Entity layout, some extension methods and the basic idea and just started from there.
+I took the entitys from his video to get started quickly, and i reused two small extension methods he wrote
+to get filepath from `string` and another one to load filepath to `List<string>` and then i just went bananas.
 
 I have learned alot watching his stuff and i want to give thanks to him for making them for us
 who really wants to learn C#.
