@@ -201,7 +201,7 @@ namespace TextDbLibrary.Classes
             string firstStatement = sqlString.Substring(currPos, nextPos);
 
             currPos = nextPos;
-            nextPos = sqlString.IndexOf(" F", currPos);// + 1;
+            nextPos = sqlString.IndexOf(" F", currPos) + 1;
 
             return firstStatement;
         }
@@ -221,7 +221,7 @@ namespace TextDbLibrary.Classes
             string secondStatement = sqlString.Substring(currPos, nextPos - currPos);
 
             currPos = nextPos;
-            nextPos = sqlString.IndexOf("]", currPos);// + 1;
+            nextPos = sqlString.IndexOf("]", currPos) + 1;
 
             return secondStatement;
         }
