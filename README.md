@@ -143,8 +143,6 @@ user input controls yet.
 I expect many issues if columns are added to tables when database file for that table
 already exists. There is no function to fix this as it is right now.
 
-This
-
 # Credits
 I have to give some credits to [**Tim Corey**](https://www.youtube.com/user/IAmTimCorey/featured). I got the idea to make this library watching
 one of his videos on youtube where he built an application using text files as a simple database and
