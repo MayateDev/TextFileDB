@@ -24,21 +24,27 @@ with that id in the other tables also.
 var db = new DbContext();
 
 // Add entity, returns entity with new id
+
 db.PersonsTbl.Add(entity);
 
 // Read entity by id
+
 db.PersonsTbl.Read<Person>(1);
 
 // Update entity, returns entity
+
 db.PersonsTbl.Update(entity);
 
 // Delete entity, relations to this entity will be deleted as well
+
 db.PersonTbl.Delete(entity);
 
 // List all
+
 db.PersonsTbl.List<Person>();
   
 // AddEntities, add a list<entity> to the database
+  
 db.PersonsTbl.AddEntities(entityList);
   
 # More info to come...
