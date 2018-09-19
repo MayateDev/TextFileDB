@@ -22,15 +22,20 @@ with that id in the other tables also.
 I built in functionality to parse some **really basic** sql statements to the database.
 You can parse a **Select From Where** statement and get the result back in a DataSet.
 
-Examples: 
-This will give you a DataSet with the columns Id, FirstName and LastName that matches the condition.
+### Sql Examples 
+**This will give you a DataSet with the columns Id, FirstName and LastName that matches the condition.**
 ```SQL
 Select [Id], [FirstName], [LastName] From [PersonTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
 ```
 
-This will give you a DataSet with all the columns that matches the condition.
+**This will give you a DataSet with all the columns that matches the condition.**
 ```SQL
 Select * From [PersonTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
+```
+
+**This will give you a DataSet with all the columns and all the rows in a table.**
+```SQL
+Select * From [PersonTbl]
 ```
 
 The library creates a json file over the database schema, but this file looks a little bit
@@ -39,7 +44,7 @@ wonky, will have to look more in to this, never worked with json before.
 The library also creates a TextDbInfo.tdb that contains the current primary key for each table
 and info about the columns on the tables.
 
-It looks a ittle bit like this:
+It looks a little bit like this:
 ```
 <![DbInfo]>
     <Tables Count=3>
@@ -70,7 +75,10 @@ It looks a ittle bit like this:
 </[DbInfo]>
 ```
 
-# Examples
+# Database Examples
+Here are some examples of operation that you can do on the database.
+
+## Table example
 - A table setup in your class that inherits from TextDbSchema
 ```C#
 public IDbTableSet PersonsTbl
@@ -96,37 +104,38 @@ public IDbTableSet PersonsTbl
 }
 ```
 
+## CRUD examples
 - New up of your class that inherits from TextDbSchema, in this case DbContext
 ```C#
 var db = new DbContext();
 ```
 
 
-- Add entity, returns entity with new id \=\> 
+- Add entity, returns entity with new id
 ```c#
 db.PersonsTbl.Add(entity);
 ```
 
 
-- Read entity by id \=\> 
+- Read entity by id
 ```c#
 db.PersonsTbl.Read<Person>(1);
 ```
 
-- Update entity, returns entity \=\> 
+- Update entity, returns entity
 ```c#
 db.PersonsTbl.Update(entity);
 ```
 
-- Delete entity, relations to this entity will be deleted as well =\> 
+- Delete entity, relations to this entity will be deleted as well
 ```c#
 db.PersonTbl.Delete(entity);
 ```
-- List all =\> 
+- List all
 ```c#
 db.PersonsTbl.List<Person>();
 ```
-- AddEntities, add a list\<entity\> to the database =\> 
+- AddEntities, add a list\<entity\> to the database
 ```c#
 db.PersonsTbl.AddEntities(entityList);
 ```
