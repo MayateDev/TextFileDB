@@ -105,38 +105,27 @@ public IDbTableSet PersonsTbl
 ```
 
 ## CRUD examples
-- New up of your class that inherits from TextDbSchema, in this case DbContext
 ```C#
+// New up of your class that inherits from TextDbSchema, in this case DbContext
 var db = new DbContext();
-```
 
-
-- Add entity, returns entity with new id
-```c#
+// Add entity, returns entity with new id
 db.PersonsTbl.Add(entity);
-```
 
-
-- Read entity by id
-```c#
+// Read entity by id
 db.PersonsTbl.Read<Person>(1);
-```
 
-- Update entity, returns entity
-```c#
+// Update entity, returns entity
 db.PersonsTbl.Update(entity);
-```
 
-- Delete entity, relations to this entity will be deleted as well
-```c#
+// Delete entity, relations to this entity will be deleted as well
 db.PersonTbl.Delete(entity);
-```
-- List all
-```c#
+
+// List all
 db.PersonsTbl.List<Person>();
-```
-- AddEntities, add a list\<entity\> to the database
-```c#
+
+// AddEntities, add a list\<entity\> to the database
+
 db.PersonsTbl.AddEntities(entityList);
 ```
 
