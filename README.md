@@ -31,17 +31,17 @@ You can parse a **Select From Where** statement and get the result back in a Dat
 ### Sql Examples 
 **This will give you a DataSet with the columns Id, FirstName and LastName that matches the condition.**
 ```SQL
-Select [Id], [FirstName], [LastName] From [PersonTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
+Select [Id], [FirstName], [LastName] From [PersonsTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
 ```
 
 **This will give you a DataSet with all the columns that matches the condition.**
 ```SQL
-Select * From [PersonTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
+Select * From [PersonsTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
 ```
 
 **This will give you a DataSet with all the columns and all the rows in a table.**
 ```SQL
-Select * From [PersonTbl]
+Select * From [PersonsTbl]
 ```
 
 The library creates a json file over the database schema, but this file looks a little bit
