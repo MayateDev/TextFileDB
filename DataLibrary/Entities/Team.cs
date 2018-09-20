@@ -3,7 +3,7 @@ using TextDbLibrary.Interfaces;
 
 namespace DataLibrary.Entities
 {
-    public class Team : IEntity
+    public class Team : IPrimaryInt
     {
         public int Id { get; set; }
         public List<Person> TeamMembers { get; set; } = new List<Person>();

@@ -2,7 +2,7 @@
 
 namespace DataLibrary.Entities
 {
-    public class Prize : IEntity
+    public class Prize : IPrimaryInt
     {
         public int Id { get; set; }
         public int PlaceNumber { get; set; }

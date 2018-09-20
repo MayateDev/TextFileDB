@@ -1,6 +1,8 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
+using DomainLibrary.Models;
 using DomainLibrary.ViewModels;
 using TrackerLibrary.Interfaces;
 
@@ -25,34 +27,70 @@ namespace TrackerUI.Controllers
 
         public ActionResult Index()
         {
-            //var prize1 = new PrizeModel
+            var prize1 = new PrizeModel
+            {
+                Id = 2,
+                PlaceNumber = 1,
+                PlaceName = "First place",
+                PrizeAmount = 100,
+                PrizePercentage = 0
+            };
+
+            var person1 = new PersonModel
+            {
+                //Id = 7,
+                FirstName = "Robert",
+                LastName = "Petersson",
+                EmailAddress = "robert@itka.se",
+                CellphoneNumber = "0735-00 13 37",
+                Prize = new List<PrizeModel> { prize1 }
+            };
+
+            var person2 = new PersonModel
+            {
+                //Id = 7,
+                FirstName = "Rut",
+                LastName = "Stensson",
+                EmailAddress = "rut@rutan.se",
+                CellphoneNumber = "0735-12 34 89",
+                Prize = new List<PrizeModel>()
+            };
+            //var p1 = _personService.Read("bfcf5e0c-64f8-448b-a30d-115f4756a60f");
+            //var p2 = _personService.Add(person1);
+            //var p3 = _personService.Add(person2);
+
+            //_personService.AddModels(new List<PersonModel> { person1, person2});
+            //var persons = _personService.List().Skip(1).ToList();
+
+            //var team = new TeamModel
             //{
-            //    PlaceNumber = 1,
-            //    PlaceName = "First place",
-            //    PrizeAmount = 100,
-            //    PrizePercentage = 0
+            //    TeamMembers = persons,
+            //    TeamName = "The Misters"
             //};
 
-            //var person1 = new PersonModel
-            //{
-            //    //Id = 7,
-            //    FirstName = "Egon",
-            //    LastName = "Rutgersson",
-            //    EmailAddress = "egon@rutgersson.se",
-            //    CellphoneNumber = "0735-12 34 89",
-            //    Prize = new List<PrizeModel>()
-            //};
+            //_teamService.Add(team);
 
-            //var p = _personService.Read(4);
+            //var p = _personService.Read("bfcf5e0c-64f8-448b-a30d-115f4756a60f");
             //p.CellphoneNumber = "0700-00 13 37";
             //p = _personService.Update(p);
 
             //// SqlParser - Send a basic sqlstring and get a DataSet back with the results
-            
+
             //var sqlString = "Select [FirstName], [LastName] From [PersonsTbl] Where [Id] != 4";
             //var results = _sqlParser.ParseSql(sqlString);
+            var p = _personService.Read("5d17c705-0cb7-4f9d-a176-29765a8825fb");
+            _personService.Delete(p);
 
-            //var teams = _teamService.List();
+            var teams = _teamService.List().ToList();
+
+            //var me = new MatchupEntryModel
+            //{
+            //    TeamCompeting = team,
+            //    Score = 5,
+            //    ParentMatchup = null
+            //};
+
+            
 
             return View();
         }

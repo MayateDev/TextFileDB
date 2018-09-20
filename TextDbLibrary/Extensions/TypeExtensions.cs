@@ -5,6 +5,8 @@ using System.Linq;
 using TextDbLibrary.Interfaces;
 using TextDbLibrary.DbSchema;
 using TextDbLibrary.Classes;
+using TextDbLibrary.Enums;
+using System;
 
 namespace TextDbLibrary.Extensions
 {
@@ -37,6 +39,43 @@ namespace TextDbLibrary.Extensions
             return File.ReadAllLines(file).ToList();
         }
 
+        public static bool TryCast<T>(this IEnumerable<IEntity> entities)
+        {
+            if (entities.Count() == 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                var tmp = entities.Cast<T>().ToList();
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool TryCast<T>(this List<IEntity> entities)
+        {
+            if (entities.Count() == 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                var tmp = entities.Cast<T>().ToList();
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
         /// <summary>
         /// Takes a TextDbFile, reads it and converts to a lsit of entities
         /// </summary>
@@ -64,7 +103,7 @@ namespace TextDbLibrary.Extensions
         /// </summary>
         /// <param name="tblSet">Table you want new id for</param>
         /// <returns></returns>
-        internal static int GetNewId(this IDbTableSet tblSet)
+        internal static int GetNewIntId(this IDbTableSet tblSet) //, PrimaryKeyType type)
         {
             var pkDict = TextDbHelpers.DbPrimaryKeyDictionary();
 
@@ -74,6 +113,16 @@ namespace TextDbLibrary.Extensions
             }
 
             throw new KeyNotFoundException("The primary key for table: " + tblSet.TableName + " could not be retreived.");
+        }
+
+        /// <summary>
+        /// Get the next id for table
+        /// </summary>
+        /// <param name="tblSet">Table you want new id for</param>
+        /// <returns></returns>
+        internal static string GetNewStringId(this IDbTableSet tblSet) //, PrimaryKeyType type)
+        {
+            return Guid.NewGuid().ToString();
         }
 
         /// <summary>

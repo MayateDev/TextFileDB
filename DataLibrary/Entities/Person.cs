@@ -3,9 +3,9 @@ using TextDbLibrary.Interfaces;
 
 namespace DataLibrary.Entities
 {
-    public class Person : IEntity
+    public class Person : IPrimaryString
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }

@@ -8,7 +8,7 @@ namespace DataLibrary.Repositories
 {
     public class Repository<TContext, TEntity> : IDisposable
         where TContext : DbContext, new()
-        where TEntity : class, IEntity
+        where TEntity : class, IEntity //, IPrimaryInt, IPrimaryString
     {
         private TContext _context;
         private IDbTableSet _tblSet;
@@ -36,9 +36,9 @@ namespace DataLibrary.Repositories
             return entity;
         }
 
-        public virtual TEntity Read(int id)
+        public virtual TEntity Read<T>(T id)
         {
-            return _tblSet.Read<TEntity>(id);
+            return _tblSet.Read<TEntity, T>(id);
         }
 
         public virtual TEntity Update(TEntity entity)
@@ -56,6 +56,11 @@ namespace DataLibrary.Repositories
         public virtual IEnumerable<TEntity> List()
         {
             return _tblSet.List<TEntity>();
+        }
+
+        public virtual IEnumerable<TEntity> AddEntities(List<TEntity> entities)
+        {
+            return _tblSet.AddEntities(entities);
         }
 
         public void Dispose()

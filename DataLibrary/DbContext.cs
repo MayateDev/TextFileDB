@@ -27,7 +27,7 @@ namespace DataLibrary
             {
                 IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
                 {
-                    new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.IntType),
+                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.StringType),
                     new DbColumn("FirstName", 1, ColumnDataType.StringType),
                     new DbColumn("LastName", 2, ColumnDataType.StringType),
                     new DbColumn("EmailAddress", 3, ColumnDataType.StringType),
@@ -78,6 +78,46 @@ namespace DataLibrary
                 string tableName = "TeamsTbl";
 
                 var tblSet = new DbTableSet<Team>(columns, dbTextFile, tableName);
+
+                return tblSet;
+            }
+        }
+
+        public IDbTableSet MatchupsTbl
+        {
+            get
+            {
+                IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
+                {
+                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.StringType),
+                    new DbRelationshipColumn("Entries", 1, ColumnDataType.MultipleRelationships, typeof(MatchupEntry), "MatchupEntriesTbl"),
+                    new DbRelationshipColumn("Winner", 2, ColumnDataType.SingleRelationship, typeof(Team), "PrizesTbl"),
+                    new DbParseableColumn<int>("MatchupRound", 3, ColumnDataType.IntType)
+                };
+                string dbTextFile = "PersonModels.csv";
+                string tableName = "PersonsTbl";
+
+                var tblSet = new DbTableSet<Person>(columns, dbTextFile, tableName);
+
+                return tblSet;
+            }
+        }
+
+        public IDbTableSet MatchupEntriesTbl
+        {
+            get
+            {
+                IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
+                {
+                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.StringType),
+                    new DbRelationshipColumn("TeamCompeting", 1, ColumnDataType.SingleRelationship, typeof(Team), "TeamsTbl"),
+                    new DbParseableColumn<double>("Score", 2, ColumnDataType.DoubleType),
+                    new DbRelationshipColumn("ParentMatchup", 3, ColumnDataType.SingleRelationship, typeof(Matchup), "MatchupsTbl")
+                };
+                string dbTextFile = "PersonModels.csv";
+                string tableName = "PersonsTbl";
+
+                var tblSet = new DbTableSet<Person>(columns, dbTextFile, tableName);
 
                 return tblSet;
             }

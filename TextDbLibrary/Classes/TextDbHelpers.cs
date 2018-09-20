@@ -137,16 +137,36 @@ namespace TextDbLibrary.Classes
                     // TODO - Get refactoring working, move this to own method, problems with passing the obj object
                     if (obj as IEnumerable != null)
                     {
-                        //
-                        obj = ((IEnumerable)obj).Cast<IEntity>().OrderBy(m => m.Id).ToList();
-                        //
-                        
+                        // Working
+                        //obj = ((IEnumerable)obj).Cast<IEntity>().OrderBy(m => m.Id).ToList();
+
+                        //var idString = "";
+
+                        //foreach (var o in (IEnumerable)obj)
+                        //{
+                        //    idString += ((IEntity)o).Id.ToString() + "^";
+                        //}
+
+                        // Test code
+                        obj = ((IEnumerable)obj).Cast<IEntity>();
                         var idString = "";
 
-                        foreach (var o in (IEnumerable)obj)
+                        if (obj as IEnumerable<IPrimaryInt> != null)
                         {
-                            idString += ((IEntity)o).Id.ToString() + "^";
+                            foreach (var o in (IEnumerable)obj)
+                            {
+                                idString += ((IPrimaryInt)o).Id.ToString() + "^";
+                            }
                         }
+
+                        if (obj as IEnumerable<IPrimaryString> != null)
+                        {
+                            foreach (var o in (IEnumerable)obj)
+                            {
+                                idString += ((IPrimaryString)o).Id.ToString() + "^";
+                            }
+                        }
+                        // End
 
                         if (idString.Length > 0)
                         {
@@ -155,7 +175,24 @@ namespace TextDbLibrary.Classes
                     }
                     else
                     {
-                        value = ((IEntity)obj).Id.ToString();
+                        // Working
+                        //value = ((IEntity)obj).Id.ToString();
+
+                        // Test code
+                        var idString = "";
+
+                        if (obj as IPrimaryInt != null)
+                        {
+                            idString += ((IPrimaryInt)obj).Id.ToString();
+                        }
+
+                        if (obj as IPrimaryString != null)
+                        {
+                            idString += ((IPrimaryString)obj).Id;
+                        }
+
+                        value = idString;
+                        // End
                     }
                 }
                 else
@@ -223,7 +260,7 @@ namespace TextDbLibrary.Classes
             string columnValue = cols[column.ColumnPosition];
             Type returnType = column.RelationshipReturnType;
             MethodInfo genericMethod = TextDbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
-            List<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
+            IEnumerable<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
             string[] ids = columnValue.Split('^');
             var objList = TextDbHelpers.CreateGenericInstanceOfType(typeof(List<>), returnType);
 
@@ -231,10 +268,32 @@ namespace TextDbLibrary.Classes
             {
                 if (id != "")
                 {
-                    var obj = relationshipList.FirstOrDefault(o => o.Id == int.Parse(id));
+                    // Working
+                    //var obj = relationshipList.FirstOrDefault(o => o.Id == int.Parse(id));
 
+                    //var addMethod = objList.GetType().GetMethod("Add");
+                    //addMethod.Invoke(objList, new object[] { obj });
+
+                    // Test code
                     var addMethod = objList.GetType().GetMethod("Add");
-                    addMethod.Invoke(objList, new object[] { obj });
+
+                    if (relationshipList.TryCast<IPrimaryInt>()) // && relationshipList.Count() > 0
+                    {
+                        var tmpList = relationshipList.Cast<IPrimaryInt>().ToList();
+                        var obj = tmpList.FirstOrDefault(o => o.Id == int.Parse(id));
+
+                        addMethod.Invoke(objList, new object[] { obj });
+                    }
+
+                    if (relationshipList.TryCast<IPrimaryString>()) // && relationshipList.Count() > 0
+                    {
+                        var tmpList = relationshipList.Cast<IPrimaryString>().ToList();
+                        var obj = tmpList.FirstOrDefault(o => o.Id == id);
+
+                        addMethod.Invoke(objList, new object[] { obj });
+                    }
+                    // End
+
                 }
             }
 
@@ -253,10 +312,32 @@ namespace TextDbLibrary.Classes
             string columnValue = cols[column.ColumnPosition];
             Type returnType = column.RelationshipReturnType;
             MethodInfo genericMethod = TextDbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
-            List<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
+            IEnumerable<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
 
-            var obj = relationshipList.FirstOrDefault(o => o.Id == int.Parse(columnValue));
-            property.SetValue(entity, obj, null);
+            // Orginal
+            //var obj = relationshipList.FirstOrDefault(o => o.Id == int.Parse(columnValue));
+
+            //property.SetValue(entity, obj, null);
+
+            // Test code
+            object obj = new object();
+
+            if (relationshipList.TryCast<IPrimaryInt>() && (columnValue != null && columnValue != ""))
+            {
+                var tmpList = relationshipList.Cast<IPrimaryInt>().ToList();
+                obj = tmpList.FirstOrDefault(o => o.Id == int.Parse(columnValue));
+
+                property.SetValue(entity, obj, null);
+            }
+
+            if (relationshipList.TryCast<IPrimaryString>() && (columnValue != null && columnValue != ""))
+            {
+                var tmpList = relationshipList.Cast<IPrimaryInt>().ToList();
+                obj = tmpList.FirstOrDefault(o => o.Id == int.Parse(columnValue));
+
+                property.SetValue(entity, obj, null);
+            }
+            // End
         }
 
         /// <summary>
@@ -265,7 +346,8 @@ namespace TextDbLibrary.Classes
         /// <param name="entities">Entities in table</param>
         /// <param name="deletedId">Id for the deleted entity</param>
         /// <param name="columns">Columns in the table</param>
-        internal static void CleanUpDeletedRelationsInEntities(List<string> entities, int deletedId, List<IDbColumn> columns)
+        //internal static void CleanUpDeletedRelationsInEntities(List<string> entities, int deletedId, List<IDbColumn> columns)
+        internal static void CleanUpDeletedRelationsInEntities(List<string> entities, string deletedId, List<IDbColumn> columns)
         {
             var csvHeaderLine = entities[0];
             entities.RemoveAt(0);
@@ -278,7 +360,7 @@ namespace TextDbLibrary.Classes
                     string[] cols = entities[i].Split(';');
                     List<string> relationsIds = cols[colPos].Split('^').ToList();
 
-                    relationsIds.RemoveAll(x => x == deletedId.ToString());
+                    relationsIds.RemoveAll(x => x == deletedId); //.ToString());
                     var newRelationsString = "";
 
                     if (relationsIds.Count > 0)
@@ -293,8 +375,6 @@ namespace TextDbLibrary.Classes
                     cols[colPos] = newRelationsString;
 
                     entities[i] = string.Join(";", cols);
-
-                    //var t = 1;
                 }
             }
             entities.Insert(0, csvHeaderLine);
@@ -435,6 +515,24 @@ namespace TextDbLibrary.Classes
                 }
             }
         }
+
+        //private static bool TryCast<T>(this IEnumerable<IEntity> entities)
+        //{
+        //    if (entities.Count() == 0)
+        //    {
+        //        return false;
+        //    }
+
+        //    try
+        //    {
+        //        var tmp = entities.Cast<T>().ToList();
+        //    }
+        //    catch (InvalidCastException)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         /// <summary>
         /// Generates our Csv header line

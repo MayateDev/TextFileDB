@@ -22,7 +22,7 @@ namespace TrackerLibrary.Services
             return Mapper.Map<TModel>(_repo.Add(Mapper.Map<TEntity>(model)));
         }
 
-        public virtual TModel Read(int id)
+        public virtual TModel Read<T>(T id)
         {
             return Mapper.Map<TModel>(_repo.Read(id));
         }
@@ -41,6 +41,11 @@ namespace TrackerLibrary.Services
         public virtual IEnumerable<TModel> List()
         {
             return Mapper.Map<IEnumerable<TModel>>(_repo.List());
+        }
+
+        public virtual IEnumerable<TModel> AddModels(List<TModel> models)
+        {
+            return Mapper.Map<IEnumerable<TModel>>(_repo.AddEntities(Mapper.Map<List<TEntity>>(models)));
         }
     }
 }
