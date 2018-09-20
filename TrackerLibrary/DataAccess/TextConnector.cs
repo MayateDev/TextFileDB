@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using DataLibrary;
+﻿using DataLibrary;
 using DomainLibrary.Interfaces;
 using DomainLibrary.Models;
-using TextDbLibrary.Classes;
-using TextDbLibrary.DbSchema;
 using TextDbLibrary.Extensions;
-using TextDbLibrary.Interfaces;
 
 namespace TrackerLibrary.DataAccess
 {

@@ -48,15 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\DbColumn.cs" />
-    <Compile Include="Classes\DbParseableColumn.cs" />
-    <Compile Include="Classes\DbPrimaryKeyColumn.cs" />
-    <Compile Include="Classes\DbRelationshipColumn.cs" />
-    <Compile Include="Classes\DbTableSet.cs" />
+    <Compile Include="TableClasses\DbColumn.cs" />
+    <Compile Include="TableClasses\DbParseableColumn.cs" />
+    <Compile Include="TableClasses\DbPrimaryKeyColumn.cs" />
+    <Compile Include="TableClasses\DbRelationshipColumn.cs" />
+    <Compile Include="TableClasses\DbTableSet.cs" />
     <Compile Include="Classes\ModelDeletedEventArgs.cs" />
     <Compile Include="Classes\SqlParser.cs" />
     <Compile Include="Classes\TextDbHelpers.cs" />
-    <Compile Include="Classes\TextDbTableActions.cs" />
+    <Compile Include="Extensions\TextDbTableActions.cs" />
     <Compile Include="DbSchema\TextDbSchema.cs" />
     <Compile Include="Enums\ColumnDataType.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
@@ -74,6 +74,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

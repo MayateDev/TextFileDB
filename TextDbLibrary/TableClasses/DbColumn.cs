@@ -1,7 +1,7 @@
 ﻿using TextDbLibrary.Enums;
 using TextDbLibrary.Interfaces;
 
-namespace TextDbLibrary.Classes
+namespace TextDbLibrary.TableClasses
 {
     public class DbColumn : IDbColumn
     {

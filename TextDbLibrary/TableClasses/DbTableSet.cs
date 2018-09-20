@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TextDbLibrary.DbSchema;
-using TextDbLibrary.Extensions;
 using TextDbLibrary.Interfaces;
 
-namespace TextDbLibrary.Classes
+namespace TextDbLibrary.TableClasses
 {
     public class DbTableSet<T> : IDbTableSet
     {

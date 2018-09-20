@@ -1,10 +1,7 @@
 ﻿using DataLibrary.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextDbLibrary.Classes;
+using TextDbLibrary.TableClasses;
 using TextDbLibrary.DbSchema;
 using TextDbLibrary.Enums;
 using TextDbLibrary.Interfaces;

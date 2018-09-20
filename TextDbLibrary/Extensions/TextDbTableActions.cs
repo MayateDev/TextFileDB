@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextDbLibrary.DbSchema;
-using TextDbLibrary.Enums;
-using TextDbLibrary.Extensions;
+using TextDbLibrary.Classes;
 using TextDbLibrary.Interfaces;
 
-namespace TextDbLibrary.Classes
+namespace TextDbLibrary.Extensions
 {
     public static class TextDbTableActions
     {

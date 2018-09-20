@@ -2,7 +2,7 @@
 using TextDbLibrary.Enums;
 using TextDbLibrary.Interfaces;
 
-namespace TextDbLibrary.Classes
+namespace TextDbLibrary.TableClasses
 {
     public class DbParseableColumn<T> : DbColumn, IDbParseableColumn<T>
     {

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using TextDbLibrary.DbSchema;
 using TrackerLibrary.Config;
-using TrackerLibrary.DataAccess;
-using DomainLibrary.Enums;
 using System.Web.Http;
 
 namespace TrackerUI

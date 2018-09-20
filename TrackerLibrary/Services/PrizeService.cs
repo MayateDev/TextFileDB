@@ -1,11 +1,6 @@
 ﻿using DataLibrary.Entities;
 using DataLibrary.Interfaces;
 using DomainLibrary.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TrackerLibrary.Interfaces;
 
 namespace TrackerLibrary.Services

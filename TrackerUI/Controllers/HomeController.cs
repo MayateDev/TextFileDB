@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web.Mvc;
-using DomainLibrary.Models;
 using DomainLibrary.ViewModels;
-using TextDbLibrary.Classes;
-using TextDbLibrary.DbSchema;
-using TextDbLibrary.Extensions;
-using TrackerLibrary.Config;
-using TrackerLibrary.DataAccess;
 using TrackerLibrary.Interfaces;
 
 namespace TrackerUI.Controllers

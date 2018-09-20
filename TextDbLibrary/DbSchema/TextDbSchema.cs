@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using TextDbLibrary.Classes;
-using TextDbLibrary.Enums;
 using TextDbLibrary.Extensions;
 using TextDbLibrary.Interfaces;
 using System.Linq;
-using System.Reflection;
-using System;
 
 namespace TextDbLibrary.DbSchema
 {
