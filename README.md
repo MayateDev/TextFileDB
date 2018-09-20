@@ -139,8 +139,8 @@ db.PersonsTbl.AddEntities(entityList);
 Yes. Probably alot at the moment. Have not cared to much about error handling and 
 user input controls yet.
 
-I expect many issues if columns are added to tables when database file for that table
-already exists. There is no function to fix this as it is right now.
+I expect many issues if columns are added to or deleted from tables when database file 
+for that table already exists. There is no function to fix this as it is right now.
 
 # Credits
 I have to give some credits to [**Tim Corey**](https://www.youtube.com/user/IAmTimCorey/featured). I got the idea to make this library watching
