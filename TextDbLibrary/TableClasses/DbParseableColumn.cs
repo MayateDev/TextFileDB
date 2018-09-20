@@ -12,6 +12,7 @@ namespace TextDbLibrary.TableClasses
 
         }
 
+        // TODO - This part probably needs an overhaul
         public T ParseColumn(string value)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
