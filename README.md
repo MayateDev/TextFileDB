@@ -131,8 +131,7 @@ db.PersonTbl.Delete(entity);
 // List all
 db.PersonsTbl.List<Person>();
 
-// AddEntities, add a list\<entity\> to the database
-
+// AddEntities, add a list<entity> to the database
 db.PersonsTbl.AddEntities(entityList);
 ```
 
