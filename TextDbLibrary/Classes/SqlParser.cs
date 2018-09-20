@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TextDbLibrary.DbSchema;
 using TextDbLibrary.Enums;
 using TextDbLibrary.Extensions;
@@ -15,20 +16,28 @@ namespace TextDbLibrary.Classes
     {
         public DataSet ParseSql(string sqlString)
         {
+            var _sqlString = Regex.Replace(sqlString, "select", "SELECT", RegexOptions.IgnoreCase);
+            _sqlString = Regex.Replace(_sqlString, "from", "FROM", RegexOptions.IgnoreCase);
+            _sqlString = Regex.Replace(_sqlString, "where", "WHERE", RegexOptions.IgnoreCase);
+
             var db = new TextDbSchema();
 
             int currPos = 0;
-            int nextPos = sqlString.IndexOf(' ', currPos);
+            int nextPos = _sqlString.IndexOf(' ', currPos);
 
-            string firstStatement = GetFirstStatement(ref currPos, ref nextPos, sqlString);
-            List<string> selectedColumnsList = GetSelectedColumnsList(ref currPos, ref nextPos, sqlString);
-            string secondStatement = GetSecondStatement(ref currPos, ref nextPos, sqlString);
-            string selectedTable = GetSelectedTable(ref currPos, ref nextPos, sqlString);
+            string firstStatement = GetFirstStatement(ref currPos, ref nextPos, _sqlString);
+            List<string> selectedColumnsList = GetSelectedColumnsList(ref currPos, ref nextPos, _sqlString);
+            string secondStatement = GetSecondStatement(ref currPos, ref nextPos, _sqlString);
+            string selectedTable = GetSelectedTable(ref currPos, ref nextPos, _sqlString);
 
-            // TODO - After here check if sqlString is finished.
-            // If sql is: Select * From [PersonsTbl]
-            // there will be no thirdStatement or conditionsString
-            string thirdStatement = GetThirdStatement(ref currPos, ref nextPos, sqlString);
+            string thirdStatement = "";
+            string conditionsString = "";
+
+            if (_sqlString.Contains("WHERE"))
+            {
+                thirdStatement = GetThirdStatement(ref currPos, ref nextPos, _sqlString);
+                conditionsString = GetConditionsString(ref currPos, ref nextPos, _sqlString);
+            }
 
             var tblSet = db.Tables.Where(t => t.TableName == selectedTable).FirstOrDefault();
             IfStarDoAllColumnsInsert(ref selectedColumnsList, tblSet.Columns);
@@ -36,13 +45,10 @@ namespace TextDbLibrary.Classes
             Dictionary<string, int> selectedColumnsDict = GetColumnsDictionary(selectedTable, tblSet.Columns, selectedColumnsList);
             DataSet queryDataSet = CreateDataSetTableAndColumns(selectedColumnsDict, tblSet.Columns);
 
-
             List<string> entities = tblSet.DbTextFile
                 .FullFilePath()
                 .LoadFile();
             entities.RemoveAt(0);
-
-            string conditionsString = GetConditionsString(ref currPos, ref nextPos, sqlString);
 
             foreach (var e in entities)
             {
@@ -73,7 +79,6 @@ namespace TextDbLibrary.Classes
                 {
                     throw new Exception("Could not parse your sqlString.", ex);
                 }
-
             }
 
             return queryDataSet;
@@ -193,73 +198,70 @@ namespace TextDbLibrary.Classes
             }
         }
 
-        // TODO - IndexOf(" F") <- what if IndexOf(" f"). 
-        private string GetFirstStatement(ref int currPos, ref int nextPos, string sqlString)
+        private string GetFirstStatement(ref int currPos, ref int nextPos, string _sqlString)
         {
-            string firstStatement = sqlString.Substring(currPos, nextPos);
-
-            currPos = nextPos;
-            nextPos = sqlString.IndexOf(" F", currPos) + 1;
+            string firstStatement = _sqlString.Substring(currPos, nextPos);
 
             return firstStatement;
         }
 
-        private List<string> GetSelectedColumnsList(ref int currPos, ref int nextPos, string sqlString)
+        private List<string> GetSelectedColumnsList(ref int currPos, ref int nextPos, string _sqlString)
         {
-            var selectedColumnsList = sqlString.Substring(currPos, nextPos - currPos).Trim().Replace(" ", "").Split(',').ToList();
-
             currPos = nextPos;
-            nextPos = sqlString.IndexOf(' ', currPos);
+            nextPos = _sqlString.IndexOf(" F", currPos);
+
+            var selectedColumnsList = _sqlString.Substring(currPos, nextPos - currPos).Trim().Replace(" ", "").Split(',').ToList();
 
             return selectedColumnsList;
         }
 
-        private string GetSecondStatement(ref int currPos, ref int nextPos, string sqlString)
+        private string GetSecondStatement(ref int currPos, ref int nextPos, string _sqlString)
         {
-            string secondStatement = sqlString.Substring(currPos, nextPos - currPos);
+            currPos = nextPos + 1;
+            nextPos = _sqlString.IndexOf(" [", currPos);
 
-            currPos = nextPos;
-            nextPos = sqlString.IndexOf("]", currPos) + 1;
+            string secondStatement = _sqlString.Substring(currPos, nextPos - currPos);
 
             return secondStatement;
         }
 
-        private string GetSelectedTable(ref int currPos, ref int nextPos, string sqlString)
+        private string GetSelectedTable(ref int currPos, ref int nextPos, string _sqlString)
         {
-            string selectedTable = sqlString.Substring(currPos, nextPos - currPos).Trim();
-            selectedTable = selectedTable.Replace("[", "").Replace("]", "");
+            currPos = nextPos + 1;
+            nextPos = _sqlString.IndexOf("]", currPos);
 
-            currPos = nextPos;
-            nextPos = sqlString.IndexOf(' ', currPos);
+            string selectedTable = _sqlString.Substring(currPos, nextPos - currPos).Trim();
+            selectedTable = selectedTable.Replace("[", "").Replace("]", "");
 
             return selectedTable;
         }
 
-        private string GetThirdStatement(ref int currPos, ref int nextPos, string sqlString)
+        private string GetThirdStatement(ref int currPos, ref int nextPos, string _sqlString)
         {
-            // TODO - better solution, use a ref bool to check after selected table if the string is finshed?
-            if (currPos + (nextPos - currPos) > sqlString.Length || currPos + (nextPos - currPos) <= 0)
+            currPos = nextPos + 2;
+            nextPos = _sqlString.IndexOf(' ', currPos);
+
+            if (currPos < 0 || nextPos < 0)
             {
                 return "";
             }
 
-            string thirdStatement = sqlString.Substring(currPos, nextPos - currPos);
-
-            currPos = nextPos;
-            nextPos = sqlString.Length;
+            string thirdStatement = _sqlString.Substring(currPos, nextPos - currPos);
 
             return thirdStatement;
         }
 
-        private string GetConditionsString(ref int currPos, ref int nextPos, string sqlString)
+        private string GetConditionsString(ref int currPos, ref int nextPos, string _sqlString)
         {
-            // TODO - better solution, use a ref bool to check after selected table if the string is finshed?
-            if (currPos + (nextPos - currPos) > sqlString.Length || currPos + (nextPos - currPos) <= 0)
+            currPos = nextPos;
+            nextPos = _sqlString.Length;
+
+            if (currPos < 0 || nextPos < 0)
             {
                 return "";
             }
 
-            string conditionsString = sqlString.Substring(currPos, nextPos - currPos).Trim();
+            string conditionsString = _sqlString.Substring(currPos, nextPos - currPos).Trim();
             conditionsString = conditionsString.Replace("'", "\"");
 
             return conditionsString;
