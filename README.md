@@ -111,6 +111,20 @@ public IDbTableSet PersonsTbl
 }
 ```
 
+## Entity example
+- A entity for the database has to use the provided IEntity interface
+```C#
+public class Person : IEntity
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string EmailAddress { get; set; }
+    public string CellphoneNumber { get; set; }
+    public List<Prize> Prize { get; set; }
+}
+```
+
 ## CRUD examples
 ```C#
 // New up of your class that inherits from TextDbSchema, in this case DbContext
