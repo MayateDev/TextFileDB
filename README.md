@@ -112,7 +112,7 @@ public IDbTableSet PersonsTbl
 ```
 
 ## Entity example
-- A entity for the database has to use the provided IEntity interface
+- A entity for the database has to implement the provided IEntity interface
 ```C#
 public class Person : IEntity
 {
