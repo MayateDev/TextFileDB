@@ -13,10 +13,9 @@ namespace TextDbLibrary.TableClasses
         }
 
         // TODO - This part probably needs an overhaul
-        public T ParseColumn(string value)
         //public T ParseColumn(T value) // Test code
+        public T ParseColumn(string value)
         {
-            // Working
             var converter = TypeDescriptor.GetConverter(typeof(T));
             if (converter != null)
             {

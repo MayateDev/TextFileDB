@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web.Mvc;
@@ -78,10 +79,12 @@ namespace TrackerUI.Controllers
 
             //var sqlString = "Select [FirstName], [LastName] From [PersonsTbl] Where [Id] != 4";
             //var results = _sqlParser.ParseSql(sqlString);
-            var p = _personService.Read("5d17c705-0cb7-4f9d-a176-29765a8825fb");
-            _personService.Delete(p);
+            //var p = _personService.Read("bfcf5e0c-64f8-448b-a30d-115f4756a60f");
+            //_personService.Delete(p);
+            //p.CreateDate = DateTime.Now;
+            //_personService.Update(p);
 
-            var teams = _teamService.List().ToList();
+            var persons = _personService.List().ToList();
 
             //var me = new MatchupEntryModel
             //{
@@ -98,12 +101,26 @@ namespace TrackerUI.Controllers
         [HttpPost]
         public ActionResult Index(ParseSqlStringViewModel model)
         {
-            var results = _sqlParser.ParseSql(model.SqlString);
+            var results = new DataSet();
 
-            model.QueryDataSet = results;
-            model.ColumnNames = results.Tables[0].Columns.Cast<DataColumn>()
-                                    .Select(x => x.ColumnName)
-                                    .ToArray();
+            try
+            {
+                results = _sqlParser.ParseSql(model.SqlString);
+
+                model.QueryDataSet = results;
+                model.ColumnNames = results.Tables[0].Columns.Cast<DataColumn>()
+                                        .Select(x => x.ColumnName)
+                                        .ToArray();
+
+                ViewBag.Error = false;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = true;
+                ViewBag.ErrorMsg = "Något gick åt helvete när jag skulle tyda din taskigt skrivna Sql statement, så jag gav upp!";
+                //Log(ex);
+            }
+
 
             return View(model);
         }

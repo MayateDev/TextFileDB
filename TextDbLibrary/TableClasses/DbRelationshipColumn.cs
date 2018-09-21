@@ -12,14 +12,8 @@ namespace TextDbLibrary.TableClasses
             RelationshipReturnType = relationshipReturnType;
             ToTable = toTable;
         }
-        //public string ColumnName { get; set; }
 
-        //public int ColumnPosition { get; set; }
-
-        //public ColumnDataType DataType { get; set; }
-
-        public Type RelationshipReturnType { get; set; }
-
-        public string ToTable { get; set; }
+        public Type RelationshipReturnType { get; private set; } // set;
+        public string ToTable { get; private set; } // set;
     }
 }

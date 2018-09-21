@@ -4,29 +4,37 @@
     ViewBag.Title = "Home Page";
 }
 <br />
+@if (ViewBag.Error != null && ViewBag.Error)
+{
+    <p style="color: #900000; font-weight: 900;">@ViewBag.ErrorMsg</p>
+}
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
     <span>Sql string: </span>
-    @Html.TextBoxFor(m => m.SqlString)
+    @Html.TextBoxFor(m => m.SqlString, new { style = "width: 500px;"})
 }
 <br />
 @if (Model != null && Model.QueryDataSet != null && Model.QueryDataSet.Tables[0].Rows.Count > 0)
 {
-<table cellpadding="20" cellspacing="2" border="1">
-    <tr>
-        @foreach (var c in Model.ColumnNames)
-        {
-            <th>@c</th>
-        }
-    </tr>
-    @for (int i = 0; i < Model.QueryDataSet.Tables[0].Rows.Count; i++)
-    {
+    <table cellpadding="20" cellspacing="2" border="1">
         <tr>
-        @foreach (var c in Model.ColumnNames)
-        {
-            <td>@Model.QueryDataSet.Tables[0].Rows[i][c]</td>
-        }
+            @foreach (var c in Model.ColumnNames)
+            {
+                <th>@c</th>
+            }
         </tr>
-    }
-</table>
+        @for (int i = 0; i < Model.QueryDataSet.Tables[0].Rows.Count; i++)
+        {
+            <tr>
+                @foreach (var c in Model.ColumnNames)
+                {
+                    <td>@Model.QueryDataSet.Tables[0].Rows[i][c]</td>
+                }
+            </tr>
+        }
+    </table>
+}
+else if (Model != null && Model.QueryDataSet != null && Model.QueryDataSet.Tables[0].Rows.Count == 0)
+{
+<p>Inga matchande rader</p>
 }

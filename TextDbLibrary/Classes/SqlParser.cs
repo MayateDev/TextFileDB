@@ -14,6 +14,12 @@ namespace TextDbLibrary.Classes
 {
     public class SqlParser
     {
+        /// <summary>
+        /// A method that takes an simple sql string of format: Select [ColumnName], [ColumnName] From [TableName] Where [ColumnName] >= 10
+        /// the Where clause is optional and you can also use a wildcard "*" like this: Select * From [TableName]
+        /// </summary>
+        /// <param name="sqlString">Sql SELECT statement</param>
+        /// <returns></returns>
         public DataSet ParseSql(string sqlString)
         {
             var _sqlString = Regex.Replace(sqlString, "select", "SELECT", RegexOptions.IgnoreCase);
@@ -84,6 +90,13 @@ namespace TextDbLibrary.Classes
             return queryDataSet;
         }
 
+        /// <summary>
+        /// A Dictionary with all the columns of the selected table
+        /// </summary>
+        /// <param name="selectedTable">Name of the table we are working on</param>
+        /// <param name="columns">List of columns of that table</param>
+        /// <param name="selectedColumnsList">Columnnames extracted from sql statement</param>
+        /// <returns>Dictionary with ColumnName as key, and ColumnPosition as value</returns>
         private Dictionary<string, int> GetColumnsDictionary(string selectedTable, IReadOnlyList<IDbColumn> columns, List<string> selectedColumnsList)
         {
             Dictionary<string, int> selectedColumnsDict = new Dictionary<string, int>();
@@ -99,6 +112,12 @@ namespace TextDbLibrary.Classes
             return selectedColumnsDict;
         }
 
+        /// <summary>
+        /// Creates a new DataSet with a table and the columns from our select statement
+        /// </summary>
+        /// <param name="selectedColumnsDict">Dictionary with the selected columns</param>
+        /// <param name="columns">List of all our columns in the table</param>
+        /// <returns></returns>
         private DataSet CreateDataSetTableAndColumns(Dictionary<string, int> selectedColumnsDict, IReadOnlyList<IDbColumn> columns)
         {
             DataSet queryDataSet = new DataSet();
@@ -112,19 +131,23 @@ namespace TextDbLibrary.Classes
                 Type dtColumnType = typeof(string);
                 ColumnDataType columnDataType = columns[selectedColumnsDict.ElementAt(i).Value].DataType;
 
-                if (columnDataType == ColumnDataType.IntType)
+                if (columnDataType == ColumnDataType.Int)
                 {
                     dtColumnType = typeof(int);
                 }
-                else if (columnDataType == ColumnDataType.DecimalType)
+                else if (columnDataType == ColumnDataType.Decimal)
                 {
                     dtColumnType = typeof(decimal);
                 }
-                else if (columnDataType == ColumnDataType.DoubleType)
+                else if (columnDataType == ColumnDataType.Double)
                 {
                     dtColumnType = typeof(double);
                 }
-                else if ((columnDataType == ColumnDataType.StringType) || columnDataType == ColumnDataType.SingleRelationship || columnDataType == ColumnDataType.MultipleRelationships)
+                else if (columnDataType == ColumnDataType.DateTime)
+                {
+                    dtColumnType = typeof(DateTime);
+                }
+                else if ((columnDataType == ColumnDataType.String) || columnDataType == ColumnDataType.SingleRelationship || columnDataType == ColumnDataType.MultipleRelationships)
                 {
                     dtColumnType = typeof(string);
                 }
@@ -135,6 +158,13 @@ namespace TextDbLibrary.Classes
             return queryDataSet;
         }
 
+        /// <summary>
+        /// Creates a new DataRow in out DataSet.Table
+        /// </summary>
+        /// <param name="queryDataSet">The DataSet we wish to insert a row in</param>
+        /// <param name="selectedColumnsDict">Selected columns dicitionary</param>
+        /// <param name="columns">All the columns in the table</param>
+        /// <param name="cols">Row in string[] format</param>
         private void CreateDataRow(ref DataSet queryDataSet, Dictionary<string, int> selectedColumnsDict, IReadOnlyList<IDbColumn> columns, string[] cols)
         {
             DataRow queryDataRow;
@@ -144,37 +174,61 @@ namespace TextDbLibrary.Classes
             {
                 ColumnDataType columnDataType = columns[c.Value].DataType;
 
-                SetQueryDataRow(ref queryDataRow, c, cols, columnDataType);
+                SetQueryDataColumn(ref queryDataRow, c, cols, columnDataType);
             }
 
             queryDataSet.Tables["QueryData"].Rows.Add(queryDataRow);
         }
 
-        private void SetQueryDataRow(ref DataRow queryDataRow, KeyValuePair<string, int> c, string[] cols, ColumnDataType columnDataType)
+        /// <summary>
+        /// Parses and sets value to a DataRow
+        /// </summary>
+        /// <param name="queryDataRow">THe DataRow we wish to set values to</param>
+        /// <param name="c">KeyValuePair of string and int, Tablename and Columnposition</param>
+        /// <param name="cols">Row in string[] format</param>
+        /// <param name="columnDataType">ColumnDataType enum</param>
+        private void SetQueryDataColumn(ref DataRow queryDataRow, KeyValuePair<string, int> c, string[] cols, ColumnDataType columnDataType)
         {
-            if (columnDataType == ColumnDataType.IntType)
+            if (columnDataType == ColumnDataType.Int)
             {
                 queryDataRow[c.Key] = int.Parse(cols[c.Value]);
             }
-            else if (columnDataType == ColumnDataType.DecimalType)
+            else if (columnDataType == ColumnDataType.Decimal)
             {
                 queryDataRow[c.Key] = decimal.Parse(cols[c.Value]);
             }
-            else if (columnDataType == ColumnDataType.DoubleType)
+            else if (columnDataType == ColumnDataType.Double)
             {
                 queryDataRow[c.Key] = double.Parse(cols[c.Value]);
             }
-            else if ((columnDataType == ColumnDataType.StringType) || columnDataType == ColumnDataType.SingleRelationship || columnDataType == ColumnDataType.MultipleRelationships)
+            else if (columnDataType == ColumnDataType.DateTime)
+            {
+                if (cols[c.Value] != null && cols[c.Value] != "")
+                {
+                    queryDataRow[c.Key] = Convert.ToDateTime(cols[c.Value]);
+                }
+                else
+                {
+                    queryDataRow[c.Key] = default(DateTime);
+                }
+            }
+            else if ((columnDataType == ColumnDataType.String) || columnDataType == ColumnDataType.SingleRelationship || columnDataType == ColumnDataType.MultipleRelationships)
             {
                 queryDataRow[c.Key] = cols[c.Value];
             }
         }
 
+        /// <summary>
+        /// Formats the conditionString from our select statement
+        /// </summary>
+        /// <param name="columns">All columns of a table</param>
+        /// <param name="tmpConditionsString">String to format</param>
+        /// <param name="cols">Row in strng[] format</param>
         private void FormatConditionString(IReadOnlyList<IDbColumn> columns, ref string tmpConditionsString, string[] cols)
         {
             foreach (var c in columns)
             {
-                if (c.DataType == ColumnDataType.StringType || c.DataType == ColumnDataType.SingleRelationship || c.DataType == ColumnDataType.MultipleRelationships)
+                if (c.DataType == ColumnDataType.String || c.DataType == ColumnDataType.SingleRelationship || c.DataType == ColumnDataType.MultipleRelationships)
                 {
                     tmpConditionsString = tmpConditionsString.Replace("[" + c.ColumnName + "]", "\"" + cols[c.ColumnPosition] + "\"");
                 }
@@ -185,6 +239,11 @@ namespace TextDbLibrary.Classes
             }
         }
 
+        /// <summary>
+        /// Check if the select statement is a * statement
+        /// </summary>
+        /// <param name="selectedColumnsList">ist of selected columns</param>
+        /// <param name="columns">List of all columns in a table</param>
         private void IfStarDoAllColumnsInsert(ref List<string> selectedColumnsList, IReadOnlyList<IDbColumn> columns)
         {
             if (selectedColumnsList.Any(c => c.Contains("*")))
@@ -198,6 +257,13 @@ namespace TextDbLibrary.Classes
             }
         }
 
+        /// <summary>
+        /// Extracts the first statement (Select)
+        /// </summary>
+        /// <param name="currPos">Current position in string</param>
+        /// <param name="nextPos">Next position in string</param>
+        /// <param name="_sqlString">The sql statement string</param>
+        /// <returns></returns>
         private string GetFirstStatement(ref int currPos, ref int nextPos, string _sqlString)
         {
             string firstStatement = _sqlString.Substring(currPos, nextPos);
@@ -205,6 +271,13 @@ namespace TextDbLibrary.Classes
             return firstStatement;
         }
 
+        /// <summary>
+        /// Extracts the selected columns
+        /// </summary>
+        /// <param name="currPos">Current position in string</param>
+        /// <param name="nextPos">Next position in string</param>
+        /// <param name="_sqlString">The sql statement string</param>
+        /// <returns></returns>
         private List<string> GetSelectedColumnsList(ref int currPos, ref int nextPos, string _sqlString)
         {
             currPos = nextPos;
@@ -215,6 +288,13 @@ namespace TextDbLibrary.Classes
             return selectedColumnsList;
         }
 
+        /// <summary>
+        /// Extracts the second statement (From)
+        /// </summary>
+        /// <param name="currPos">Current position in string</param>
+        /// <param name="nextPos">Next position in string</param>
+        /// <param name="_sqlString">The sql statement string</param>
+        /// <returns></returns>
         private string GetSecondStatement(ref int currPos, ref int nextPos, string _sqlString)
         {
             currPos = nextPos + 1;
@@ -225,6 +305,13 @@ namespace TextDbLibrary.Classes
             return secondStatement;
         }
 
+        /// <summary>
+        /// Extracts the selected table
+        /// </summary>
+        /// <param name="currPos">Current position in string</param>
+        /// <param name="nextPos">Next position in string</param>
+        /// <param name="_sqlString">The sql statement string</param>
+        /// <returns></returns>
         private string GetSelectedTable(ref int currPos, ref int nextPos, string _sqlString)
         {
             currPos = nextPos + 1;
@@ -236,6 +323,13 @@ namespace TextDbLibrary.Classes
             return selectedTable;
         }
 
+        /// <summary>
+        /// Extrcts the third statement (Where)
+        /// </summary>
+        /// <param name="currPos">Current position in string</param>
+        /// <param name="nextPos">Next position in string</param>
+        /// <param name="_sqlString">The sql statement string</param>
+        /// <returns></returns>
         private string GetThirdStatement(ref int currPos, ref int nextPos, string _sqlString)
         {
             currPos = nextPos + 2;
@@ -251,6 +345,13 @@ namespace TextDbLibrary.Classes
             return thirdStatement;
         }
 
+        /// <summary>
+        /// Extracts the conditions string
+        /// </summary>
+        /// <param name="currPos">Current position in string</param>
+        /// <param name="nextPos">Next position in string</param>
+        /// <param name="_sqlString">The sql statement string</param>
+        /// <returns></returns>
         private string GetConditionsString(ref int currPos, ref int nextPos, string _sqlString)
         {
             currPos = nextPos;

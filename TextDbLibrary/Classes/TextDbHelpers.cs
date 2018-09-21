@@ -16,6 +16,11 @@ namespace TextDbLibrary.Classes
 {
     public static class TextDbHelpers
     {
+        /// <summary>
+        /// Get a IDbTableSet from TextDbSchema based on an entity type
+        /// </summary>
+        /// <param name="entityType">Type of the entity</param>
+        /// <returns></returns>
         public static IDbTableSet GetTableSetFromEntity(Type entityType)
         {
             var dbSchema = new TextDbSchema();
@@ -39,13 +44,12 @@ namespace TextDbLibrary.Classes
 
             foreach (var c in tblSet.Columns)
             {
-
                 var property = entity.GetType().GetProperty(c.ColumnName, BindingFlags.Public | BindingFlags.Instance);
                 if (property != null && property.CanWrite)
                 {
                     switch (c.DataType)
                     {
-                        case ColumnDataType.IntType:
+                        case ColumnDataType.Int:
                             if (c as IDbParseableColumn<int> != null)
                             {
                                 var column = c as IDbParseableColumn<int>;
@@ -59,7 +63,7 @@ namespace TextDbLibrary.Classes
                                 property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
                             }
                             break;
-                        case ColumnDataType.DoubleType:
+                        case ColumnDataType.Double:
                             if (c as IDbParseableColumn<double> != null)
                             {
                                 var column = c as IDbParseableColumn<double>;
@@ -67,7 +71,7 @@ namespace TextDbLibrary.Classes
                                 property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition].Replace('.', ',')), null);
                             }
                             break;
-                        case ColumnDataType.DecimalType:
+                        case ColumnDataType.Decimal:
                             if (c as IDbParseableColumn<decimal> != null)
                             {
                                 var column = c as IDbParseableColumn<decimal>;
@@ -75,7 +79,7 @@ namespace TextDbLibrary.Classes
                                 property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition].Replace('.', ',')), null);
                             }
                             break;
-                        case ColumnDataType.StringType:
+                        case ColumnDataType.String:
                             if (c as IDbPrimaryKeyColumn<string> != null)
                             {
                                 var column = c as IDbParseableColumn<string>;
@@ -85,6 +89,14 @@ namespace TextDbLibrary.Classes
                             else
                             {
                                 property.SetValue(entity, cols[c.ColumnPosition], null);
+                            }
+                            break;
+                        case ColumnDataType.DateTime:
+                            if (c as IDbParseableColumn<DateTime> != null)
+                            {
+                                var column = c as IDbParseableColumn<DateTime>;
+
+                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
                             }
                             break;
                         case ColumnDataType.SingleRelationship:
@@ -515,24 +527,6 @@ namespace TextDbLibrary.Classes
                 }
             }
         }
-
-        //private static bool TryCast<T>(this IEnumerable<IEntity> entities)
-        //{
-        //    if (entities.Count() == 0)
-        //    {
-        //        return false;
-        //    }
-
-        //    try
-        //    {
-        //        var tmp = entities.Cast<T>().ToList();
-        //    }
-        //    catch (InvalidCastException)
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
 
         /// <summary>
         /// Generates our Csv header line

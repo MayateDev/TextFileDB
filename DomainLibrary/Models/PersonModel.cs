@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TextDbLibrary.Interfaces;
 
 namespace DomainLibrary.Models
@@ -10,6 +11,7 @@ namespace DomainLibrary.Models
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public string CellphoneNumber { get; set; }
+        public DateTime CreateDate { get; set; }
         public List<PrizeModel> Prize { get; set; }
     }
 }

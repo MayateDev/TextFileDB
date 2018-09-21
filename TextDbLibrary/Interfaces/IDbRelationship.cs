@@ -4,7 +4,7 @@ namespace TextDbLibrary.Interfaces
 {
     public interface IDbRelationship
     {
-        string ToTable { get; set; }
-        Type RelationshipReturnType { get; set; }
+        string ToTable { get; } // set;
+        Type RelationshipReturnType { get; } // set;
     }
 }

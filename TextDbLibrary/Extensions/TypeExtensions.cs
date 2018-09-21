@@ -39,6 +39,12 @@ namespace TextDbLibrary.Extensions
             return File.ReadAllLines(file).ToList();
         }
 
+        /// <summary>
+        /// Method to se if IEnumreable<T> is implementing a certain interface
+        /// </summary>
+        /// <typeparam name="T">Type we want to cast to</typeparam>
+        /// <param name="entities">Entities we are working on</param>
+        /// <returns></returns>
         public static bool TryCast<T>(this IEnumerable<IEntity> entities)
         {
             if (entities.Count() == 0)
@@ -57,25 +63,6 @@ namespace TextDbLibrary.Extensions
             return true;
         }
 
-        public static bool TryCast<T>(this List<IEntity> entities)
-        {
-            if (entities.Count() == 0)
-            {
-                return false;
-            }
-
-            try
-            {
-                var tmp = entities.Cast<T>().ToList();
-            }
-            catch (InvalidCastException)
-            {
-                return false;
-            }
-            return true;
-        }
-
-
         /// <summary>
         /// Takes a TextDbFile, reads it and converts to a lsit of entities
         /// </summary>
@@ -84,7 +71,7 @@ namespace TextDbLibrary.Extensions
         /// <param name="tblSet">The table we are working with</param>
         /// <param name="csvHeaderString">Header string for Csv</param>
         /// <returns></returns>
-        internal static List<T> ConvertLinesToEntities<T>(this List<string> lines, IDbTableSet tblSet) //, out string csvHeaderString
+        internal static List<T> ConvertLinesToEntities<T>(this List<string> lines, IDbTableSet tblSet)
         {
             List<T> output = new List<T>();
 

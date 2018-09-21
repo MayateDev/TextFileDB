@@ -27,12 +27,13 @@ namespace DataLibrary
             {
                 IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
                 {
-                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.StringType),
-                    new DbColumn("FirstName", 1, ColumnDataType.StringType),
-                    new DbColumn("LastName", 2, ColumnDataType.StringType),
-                    new DbColumn("EmailAddress", 3, ColumnDataType.StringType),
-                    new DbColumn("CellphoneNumber", 4, ColumnDataType.StringType),
-                    new DbRelationshipColumn("Prize", 5, ColumnDataType.MultipleRelationships, typeof(Prize), "PrizesTbl")
+                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.String),
+                    new DbColumn("FirstName", 1, ColumnDataType.String),
+                    new DbColumn("LastName", 2, ColumnDataType.String),
+                    new DbColumn("EmailAddress", 3, ColumnDataType.String),
+                    new DbColumn("CellphoneNumber", 4, ColumnDataType.String),
+                    new DbParseableColumn<DateTime>("CreateDate", 5, ColumnDataType.DateTime),
+                    new DbRelationshipColumn("Prize", 6, ColumnDataType.MultipleRelationships, typeof(Prize), "PrizesTbl")
                 };
                 string dbTextFile = "PersonModels.csv";
                 string tableName = "PersonsTbl";
@@ -49,11 +50,11 @@ namespace DataLibrary
             {
                 IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
                 {
-                    new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.IntType),
-                    new DbParseableColumn<int>("PlaceNumber", 1, ColumnDataType.IntType),
-                    new DbColumn("PlaceName", 2, ColumnDataType.StringType),
-                    new DbParseableColumn<decimal>("PrizeAmount", 3, ColumnDataType.DecimalType),
-                    new DbParseableColumn<double>("PrizePercentage", 4, ColumnDataType.DoubleType)
+                    new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.Int),
+                    new DbParseableColumn<int>("PlaceNumber", 1, ColumnDataType.Int),
+                    new DbColumn("PlaceName", 2, ColumnDataType.String),
+                    new DbParseableColumn<decimal>("PrizeAmount", 3, ColumnDataType.Decimal),
+                    new DbParseableColumn<double>("PrizePercentage", 4, ColumnDataType.Double)
                 };
                 string dbTextFile = "PrizeModels.csv";
                 string tableName = "PrizesTbl";
@@ -70,9 +71,9 @@ namespace DataLibrary
             {
                 IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
                 {
-                    new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.IntType),
+                    new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.Int),
                     new DbRelationshipColumn("TeamMembers", 1, ColumnDataType.MultipleRelationships, typeof(Person), "PersonsTbl"),
-                    new DbColumn("TeamName", 2, ColumnDataType.StringType)
+                    new DbColumn("TeamName", 2, ColumnDataType.String)
                 };
                 string dbTextFile = "TeamModels.csv";
                 string tableName = "TeamsTbl";
@@ -89,10 +90,10 @@ namespace DataLibrary
             {
                 IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
                 {
-                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.StringType),
+                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.String),
                     new DbRelationshipColumn("Entries", 1, ColumnDataType.MultipleRelationships, typeof(MatchupEntry), "MatchupEntriesTbl"),
                     new DbRelationshipColumn("Winner", 2, ColumnDataType.SingleRelationship, typeof(Team), "PrizesTbl"),
-                    new DbParseableColumn<int>("MatchupRound", 3, ColumnDataType.IntType)
+                    new DbParseableColumn<int>("MatchupRound", 3, ColumnDataType.Int)
                 };
                 string dbTextFile = "PersonModels.csv";
                 string tableName = "PersonsTbl";
@@ -109,9 +110,9 @@ namespace DataLibrary
             {
                 IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
                 {
-                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.StringType),
+                    new DbPrimaryKeyColumn<string>("Id", 0, ColumnDataType.String),
                     new DbRelationshipColumn("TeamCompeting", 1, ColumnDataType.SingleRelationship, typeof(Team), "TeamsTbl"),
-                    new DbParseableColumn<double>("Score", 2, ColumnDataType.DoubleType),
+                    new DbParseableColumn<double>("Score", 2, ColumnDataType.Double),
                     new DbRelationshipColumn("ParentMatchup", 3, ColumnDataType.SingleRelationship, typeof(Matchup), "MatchupsTbl")
                 };
                 string dbTextFile = "PersonModels.csv";
