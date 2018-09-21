@@ -124,7 +124,7 @@ public class Person : IPrimaryInt
     public string EmailAddress { get; set; }
     public string CellphoneNumber { get; set; }
     public DateTime CreateDate { get; set; }
-    public List<Prize> Prize { get; set; }
+    public List<Prize> Prize { get; set; } = new List<Prize>();
 }
 
 public class Matchup : IPrimaryString
