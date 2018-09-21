@@ -84,7 +84,8 @@ namespace TrackerUI.Controllers
             //p.CreateDate = DateTime.Now;
             //_personService.Update(p);
 
-            var persons = _personService.List().ToList();
+            var p = _personService.Read("bfcf5e0c-64f8-448b-a30d-115f4756a60f");
+            //p = _personService.Update(p);
 
             //var me = new MatchupEntryModel
             //{

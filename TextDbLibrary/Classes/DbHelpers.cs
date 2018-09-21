@@ -14,7 +14,7 @@ using TextDbLibrary.Interfaces;
 
 namespace TextDbLibrary.Classes
 {
-    public static class TextDbHelpers
+    public static class DbHelpers
     {
         /// <summary>
         /// Get a IDbTableSet from TextDbSchema based on an entity type
@@ -104,7 +104,7 @@ namespace TextDbLibrary.Classes
                             {
                                 var column = c as IDbRelationshipColumn;
 
-                                TextDbHelpers.SetSingleRelationshipPropertyOnEntity(column, cols, property, entity);
+                                DbHelpers.SetSingleRelationshipPropertyOnEntity(column, cols, property, entity);
                             }
                             break;
                         case ColumnDataType.MultipleRelationships:
@@ -112,7 +112,7 @@ namespace TextDbLibrary.Classes
                             {
                                 var column = c as IDbRelationshipColumn;
 
-                                TextDbHelpers.SetMultipleRelatinshipPropertyOnEntity(column, cols, property, entity);
+                                DbHelpers.SetMultipleRelatinshipPropertyOnEntity(column, cols, property, entity);
                             }
                             break;
                         default:
@@ -142,53 +142,7 @@ namespace TextDbLibrary.Classes
 
                 if (c as IDbRelationshipColumn != null)
                 {
-                    var column = c as IDbRelationshipColumn;
-
-                    var obj = property.GetValue(entity);
-
-                    // TODO - Get refactoring working, move this to own method, problems with passing the obj object
-                    if (obj as IEnumerable != null)
-                    {
-                        obj = ((IEnumerable)obj).Cast<IEntity>();
-                        var idString = "";
-
-                        if (obj as IEnumerable<IPrimaryInt> != null)
-                        {
-                            foreach (var o in (IEnumerable)obj)
-                            {
-                                idString += ((IPrimaryInt)o).Id.ToString() + "^";
-                            }
-                        }
-
-                        if (obj as IEnumerable<IPrimaryString> != null)
-                        {
-                            foreach (var o in (IEnumerable)obj)
-                            {
-                                idString += ((IPrimaryString)o).Id.ToString() + "^";
-                            }
-                        }
-
-                        if (idString.Length > 0)
-                        {
-                            value = idString.Substring(0, idString.Length - 1);
-                        }
-                    }
-                    else
-                    {
-                        var idString = "";
-
-                        if (obj as IPrimaryInt != null)
-                        {
-                            idString += ((IPrimaryInt)obj).Id.ToString();
-                        }
-
-                        if (obj as IPrimaryString != null)
-                        {
-                            idString += ((IPrimaryString)obj).Id;
-                        }
-
-                        value = idString;
-                    }
+                    GenerateRelationsStringForDbFile(property, entity, ref value);
                 }
                 else
                 {
@@ -243,6 +197,54 @@ namespace TextDbLibrary.Classes
             return Activator.CreateInstance(baseType.MakeGenericType(genericType));
         }
 
+        private static void GenerateRelationsStringForDbFile<T>(PropertyInfo property, T entity, ref string value)
+        {
+            var obj = property.GetValue(entity);
+
+            if (obj as IEnumerable != null)
+            {
+                obj = ((IEnumerable)obj).Cast<IEntity>();
+                var idString = "";
+
+                if (obj as IEnumerable<IPrimaryInt> != null)
+                {
+                    foreach (var o in (IEnumerable)obj)
+                    {
+                        idString += ((IPrimaryInt)o).Id.ToString() + "^";
+                    }
+                }
+
+                if (obj as IEnumerable<IPrimaryString> != null)
+                {
+                    foreach (var o in (IEnumerable)obj)
+                    {
+                        idString += ((IPrimaryString)o).Id.ToString() + "^";
+                    }
+                }
+
+                if (idString.Length > 0)
+                {
+                    value = idString.Substring(0, idString.Length - 1);
+                }
+            }
+            else
+            {
+                var idString = "";
+
+                if (obj as IPrimaryInt != null)
+                {
+                    idString += ((IPrimaryInt)obj).Id.ToString();
+                }
+
+                if (obj as IPrimaryString != null)
+                {
+                    idString += ((IPrimaryString)obj).Id;
+                }
+
+                value = idString;
+            }
+        }
+
         /// <summary>
         /// Set property on entity object with multiple relations
         /// </summary>
@@ -254,10 +256,10 @@ namespace TextDbLibrary.Classes
         {
             string columnValue = cols[column.ColumnPosition];
             Type returnType = column.RelationshipReturnType;
-            MethodInfo genericMethod = TextDbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
-            IEnumerable<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
+            MethodInfo genericMethod = DbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
+            IEnumerable<IEntity> relationshipList = DbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
             string[] ids = columnValue.Split('^');
-            var objList = TextDbHelpers.CreateGenericInstanceOfType(typeof(List<>), returnType);
+            var objList = DbHelpers.CreateGenericInstanceOfType(typeof(List<>), returnType);
 
             foreach (var id in ids)
             {
@@ -297,8 +299,8 @@ namespace TextDbLibrary.Classes
         {
             string columnValue = cols[column.ColumnPosition];
             Type returnType = column.RelationshipReturnType;
-            MethodInfo genericMethod = TextDbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
-            IEnumerable<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
+            MethodInfo genericMethod = DbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
+            IEnumerable<IEntity> relationshipList = DbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
 
             object obj = new object();
 
@@ -421,6 +423,10 @@ namespace TextDbLibrary.Classes
                 if (pkDict.ContainsKey(tbl.TableName))
                 {
                     pk = pkDict[tbl.TableName];
+                }
+                else
+                {
+                    // TODO - Look up the highest id of table if primary key is of type int
                 }
 
                 dbInfoLines.Add($"        [{ tbl.TableName }] [PrimaryKeyCount={ pk }] ({ tbl.EntityType })");

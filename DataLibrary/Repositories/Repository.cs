@@ -16,7 +16,7 @@ namespace DataLibrary.Repositories
         public Repository()
         {
             _context = new TContext();
-            _tblSet = TextDbHelpers.GetTableSetFromEntity(typeof(TEntity));
+            _tblSet = DbHelpers.GetTableSetFromEntity(typeof(TEntity));
         }
 
         public virtual TContext Context

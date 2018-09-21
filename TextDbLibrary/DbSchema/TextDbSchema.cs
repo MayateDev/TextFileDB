@@ -54,7 +54,7 @@ namespace TextDbLibrary.DbSchema
         {
             get
             {
-                var value = TextDbHelpers.AppSettingLookUp("TextDbFolderPath");
+                var value = DbHelpers.AppSettingLookUp("TextDbFolderPath");
 
                 if (!string.IsNullOrEmpty(value))
                 {
@@ -95,12 +95,11 @@ namespace TextDbLibrary.DbSchema
         /// </summary>
         public void InitializeTextDb()
         {
-            TextDbHelpers.CreateTextDataFilesIfNotExists(SchemaTables);
-            TextDbHelpers.WriteNewDbInfoFile(SchemaTables);
+            DbHelpers.CreateTextDataFilesIfNotExists(SchemaTables);
+            DbHelpers.WriteNewDbInfoFile(SchemaTables);
             DbTableActions.EntityDeletedFromFileEvent += TextDbTableActions_EntityDeletedFromFileEvent;
         }
 
-        // vid problem testa att skapa private static bool subscribed för att hålla koll om event är reggat
         /// <summary>
         /// Method that runs when EntityDeletedFromFileEvent gets invoked
         /// </summary>
@@ -127,13 +126,12 @@ namespace TextDbLibrary.DbSchema
                                         .FullFilePath()
                                         .LoadFile();
 
-                        TextDbHelpers.CleanUpDeletedRelationsInEntities(entities, e.DeletedId, columns, ref deletedRealtions);
+                        DbHelpers.CleanUpDeletedRelationsInEntities(entities, e.DeletedId, columns, ref deletedRealtions);
 
                         File.WriteAllLines(textDbFile, entities);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-
                         throw;
                     }
 
@@ -148,7 +146,6 @@ namespace TextDbLibrary.DbSchema
             e.DeletedRelations = deletedRealtions;
         }
 
-        // TODO - Behöver jag båda två?
         /// <summary>
         /// A method that should get called from user class derived from this class
         /// </summary>

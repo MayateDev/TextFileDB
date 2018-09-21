@@ -57,7 +57,7 @@
     <Compile Include="TableClasses\DbTableSet.cs" />
     <Compile Include="Classes\EntityDeletedEventArgs.cs" />
     <Compile Include="Classes\SqlParser.cs" />
-    <Compile Include="Classes\TextDbHelpers.cs" />
+    <Compile Include="Classes\DbHelpers.cs" />
     <Compile Include="Extensions\DbTableActions.cs" />
     <Compile Include="DbSchema\TextDbSchema.cs" />
     <Compile Include="Enums\ColumnDataType.cs" />

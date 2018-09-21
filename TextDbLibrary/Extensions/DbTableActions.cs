@@ -40,7 +40,7 @@ namespace TextDbLibrary.Extensions
                 ((IPrimaryString)entity).Id = tblSet.GetNewStringId();
             }
 
-            var entityString = TextDbHelpers.ConvertEntityToTextDbLine(entity, tblSet);
+            var entityString = DbHelpers.ConvertEntityToTextDbLine(entity, tblSet);
             entities.Add(entityString);
 
             File.WriteAllLines(textDbFile, entities);
@@ -68,7 +68,7 @@ namespace TextDbLibrary.Extensions
 
             if (FindRowNumberForId(entities, tblSet, id, out rowPos))
             {
-                var entity = TextDbHelpers.ConvertTextDbLineToEntity<T>(entities[rowPos], tblSet);
+                var entity = DbHelpers.ConvertTextDbLineToEntity<T>(entities[rowPos], tblSet);
 
                 return entity;
             }
@@ -109,7 +109,7 @@ namespace TextDbLibrary.Extensions
 
             if (rowFound)
             {
-                var entityString = TextDbHelpers.ConvertEntityToTextDbLine(entity, tblSet);
+                var entityString = DbHelpers.ConvertEntityToTextDbLine(entity, tblSet);
                 entities[rowPos] = entityString;
 
                 File.WriteAllLines(textDbFile, entities);
@@ -159,7 +159,7 @@ namespace TextDbLibrary.Extensions
                 for (var i = 0; i < entityList.Count; i++)
                 {
                     ((IPrimaryInt)entityList[i]).Id = (currentPk + i);
-                    entities.Add(TextDbHelpers.ConvertEntityToTextDbLine(entityList[i], tblSet));
+                    entities.Add(DbHelpers.ConvertEntityToTextDbLine(entityList[i], tblSet));
                 }
             }
 
@@ -168,7 +168,7 @@ namespace TextDbLibrary.Extensions
                 for (var i = 0; i < entityList.Count; i++)
                 {
                     ((IPrimaryString)entityList[i]).Id = tblSet.GetNewStringId();
-                    entities.Add(TextDbHelpers.ConvertEntityToTextDbLine(entityList[i], tblSet));
+                    entities.Add(DbHelpers.ConvertEntityToTextDbLine(entityList[i], tblSet));
                 }
             }
 

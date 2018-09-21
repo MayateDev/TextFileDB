@@ -226,9 +226,13 @@ namespace TextDbLibrary.Classes
         /// <param name="cols">Row in strng[] format</param>
         private void FormatConditionString(IReadOnlyList<IDbColumn> columns, ref string tmpConditionsString, string[] cols)
         {
+            // TODO - Check for relationship column, extract that and treat by its own
             foreach (var c in columns)
             {
-                if (c.DataType == ColumnDataType.String || c.DataType == ColumnDataType.SingleRelationship || c.DataType == ColumnDataType.MultipleRelationships)
+                if (c.DataType == ColumnDataType.String || 
+                    c.DataType == ColumnDataType.SingleRelationship || 
+                    c.DataType == ColumnDataType.MultipleRelationships || 
+                    c.DataType == ColumnDataType.DateTime)
                 {
                     tmpConditionsString = tmpConditionsString.Replace("[" + c.ColumnName + "]", "\"" + cols[c.ColumnPosition] + "\"");
                 }

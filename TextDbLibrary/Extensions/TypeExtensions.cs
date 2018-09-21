@@ -79,7 +79,7 @@ namespace TextDbLibrary.Extensions
 
             foreach (string l in lines)
             {
-                T entity = TextDbHelpers.ConvertTextDbLineToEntity<T>(l, tblSet);
+                T entity = DbHelpers.ConvertTextDbLineToEntity<T>(l, tblSet);
                 output.Add(entity);
             }
             return output;
@@ -92,7 +92,7 @@ namespace TextDbLibrary.Extensions
         /// <returns></returns>
         internal static int GetNewIntId(this IDbTableSet tblSet) //, PrimaryKeyType type)
         {
-            var pkDict = TextDbHelpers.DbPrimaryKeyDictionary();
+            var pkDict = DbHelpers.DbPrimaryKeyDictionary();
 
             if (pkDict.ContainsKey(tblSet.TableName))
             {
@@ -150,7 +150,7 @@ namespace TextDbLibrary.Extensions
         {
             string csvHeaderString = "";
             var headerLine = lines[0];
-            var generatedHeaderLine = TextDbHelpers.GenerateCsvHeader(tblSet);
+            var generatedHeaderLine = DbHelpers.GenerateCsvHeader(tblSet);
 
             if (headerLine == generatedHeaderLine)
             {
