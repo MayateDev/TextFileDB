@@ -4,6 +4,7 @@ A lightweight library for setting up and running a textfile database.
 The project TextDbLibrary is the heart of this repository, the rest is just demo
 code i have set up to test the library.
 
+
 # Usage
 The library has a class TextDbSchema that you inherit from and in that class you set up
 your table models with help of different classes and interfaces.
@@ -28,28 +29,22 @@ It loads the entities relationships automatically with use of the table schema a
 I built in functionality to parse some **really basic** sql statements to the database.
 You can parse a **Select From Where** statement and get the result back in a DataSet.
 
-### Sql Examples 
-**This will give you a DataSet with the columns Id, FirstName and LastName that matches the condition.**
-```SQL
-Select [Id], [FirstName], [LastName] From [PersonsTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
+
+# Files created
+All files created wil be cerated in the folder that you choose in .config file.
+
+```xml
+<configuration>
+  <appSettings>
+    <add key="TextDbFolderPath" value="c:\temp\TextDb" />
+  </appSettings>
+</configuration>
 ```
 
-**This will give you a DataSet with all the columns that matches the condition.**
-```SQL
-Select * From [PersonsTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
-```
-
-**This will give you a DataSet with all the columns and all the rows in a table.**
-```SQL
-Select * From [PersonsTbl]
-```
-
-The library creates a json file over the database schema, but this file looks a little bit
-wonky, will have to look more in to this, never worked with json before. This file is generated
-mostly for fun as a test at the moment.
-
-The library also creates a TextDbInfo.tdb that contains the current primary key for each table
-and info about the columns on the tables.
+## TextDbInfo.tdb
+The library creates a TextDbInfo.tdb that contains the current primary key for each table, 
+if primary key is of type int otherwise you can look at it as a counter since we dont need
+to store string ids like int idas to keep track of them. It also has info about the columns on the tables.
 
 It looks a little bit like this:
 ```
@@ -81,6 +76,26 @@ It looks a little bit like this:
     </Tables>
 </[DbInfo]>
 ```
+
+## PersonsTbl.csv (example)
+It will create a ';' delimited csv file with a header for each table. The filename is set on the table object.
+DO NOT edit this header if you are trying to use this as it is right now. 
+
+A very basic check is done after some operations to check if the csv header is there, it basically just checks if 
+the first line (header) matches the header string generated for that table and if not insert a new line with header. 
+
+If you made changes to any header text this will mean that the line doesnt match and a new one is inserted, we now 
+have two, not good. This will cause parsing issues.
+
+Lets say the header of a datetime column is [CreateDate], and this value is moved to line two wich is the first line
+read, header line removed before this operation, the string [CreateDate] will not be a valid datetime.
+
+If this happens just open the csv file and remove the second line, the header that was moved down.
+
+## TextDbInfo.json
+The library also creates a json file over the database schema, but this file looks a little bit
+wonky, will have to look more in to this, never worked with json before. This file is generated
+mostly for fun as a test at the moment.
 
 # Database Examples
 Here are some examples of operation that you can do on the database.
@@ -158,6 +173,22 @@ db.PersonsTbl.List<Person>();
 
 // AddEntities, add a list<entity> to the database, returns list with new ids
 db.PersonsTbl.AddEntities(entityList);
+```
+
+## Sql Examples 
+- This will give you a DataSet with the columns Id, FirstName and LastName that matches the condition.
+```SQL
+Select [Id], [FirstName], [LastName] From [PersonsTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
+```
+
+- This will give you a DataSet with all the columns that matches the condition.
+```SQL
+Select * From [PersonsTbl] Where [FirstName] == 'Robert' && [LastName] != 'Lundgren'
+```
+
+- This will give you a DataSet with all the columns and all the rows in a table.
+```SQL
+Select * From [PersonsTbl]
 ```
 
 # Bugs
