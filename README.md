@@ -99,6 +99,7 @@ public IDbTableSet PersonsTbl
             new DbColumn("LastName", 2, ColumnDataType.StringType),
             new DbColumn("EmailAddress", 3, ColumnDataType.StringType),
             new DbColumn("CellphoneNumber", 4, ColumnDataType.StringType),
+            new DbParseableColumn<DateTime>("CreateDate", 5, ColumnDataType.DateTime),
             new DbRelationshipColumn("Prize", 5, ColumnDataType.MultipleRelationships, typeof(Prize), "PrizesTbl")
         };
         string dbTextFile = "PersonModels.csv";
@@ -112,16 +113,26 @@ public IDbTableSet PersonsTbl
 ```
 
 ## Entity example
-- A entity for the database has to implement the provided IEntity interface
+- A entity for the database has to implement either IPrimaryInt or IPrimaryString interface
+- String ids is GUID's
 ```C#
-public class Person : IEntity
+public class Person : IPrimaryInt
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string EmailAddress { get; set; }
     public string CellphoneNumber { get; set; }
+    public DateTime CreateDate { get; set; }
     public List<Prize> Prize { get; set; }
+}
+
+public class Matchup : IPrimaryString
+{
+    public string Id { get; set; }
+    public List<MatchupEntry> Entries { get; set; } = new List<MatchupEntry>();
+    public Team Winner { get; set; }
+    public int MatchupRound { get; set; }
 }
 ```
 
@@ -139,13 +150,13 @@ db.PersonsTbl.Read<Person>(1);
 // Update entity, returns entity
 db.PersonsTbl.Update(entity);
 
-// Delete entity, relations to this entity will be deleted as well
+// Delete entity, relations to this entity will be deleted as well, returns bool
 db.PersonTbl.Delete(entity);
 
 // List all
 db.PersonsTbl.List<Person>();
 
-// AddEntities, add a list<entity> to the database
+// AddEntities, add a list<entity> to the database, returns list with new ids
 db.PersonsTbl.AddEntities(entityList);
 ```
 
@@ -155,6 +166,13 @@ user input controls yet.
 
 I expect many issues if columns are added to or deleted from tables when database file 
 for that table already exists. There is no function to fix this as it is right now.
+
+To add columns should not be a big problem to fix as long as the columns from start doesnt
+get removed. My brain is working on how to fix so that columns can change under time.
+If column removed from DBContext then remove entries/column from text file.
+
+This will mean alot of string handling and so on, so this will be something that might will
+be developed over time.
 
 # Credits
 I have to give some credits to [**Tim Corey**](https://www.youtube.com/user/IAmTimCorey/featured). I got the idea to make this library watching
