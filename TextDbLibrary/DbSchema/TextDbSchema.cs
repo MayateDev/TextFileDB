@@ -4,6 +4,7 @@ using TextDbLibrary.Classes;
 using TextDbLibrary.Extensions;
 using TextDbLibrary.Interfaces;
 using System.Linq;
+using System;
 
 namespace TextDbLibrary.DbSchema
 {
@@ -107,6 +108,8 @@ namespace TextDbLibrary.DbSchema
         /// <param name="e">EventArgs for the EntityDeletedFromFileEvent</param>
         private void TextDbTableActions_EntityDeletedFromFileEvent(object sender, EntityDeletedEventArgs e)
         {
+            int deletedRealtions = 0;
+
             foreach (var tbl in SchemaTables)
             {
                 var columns = tbl.Columns.Where(
@@ -118,16 +121,31 @@ namespace TextDbLibrary.DbSchema
                 if (columns.Count > 0)
                 {
                     var textDbFile = tbl.DbTextFile.FullFilePath();
-                    List<string> entities = tbl.DbTextFile
-                        .FullFilePath()
-                        .LoadFile();
+                    try
+                    {
+                        List<string> entities = tbl.DbTextFile
+                                        .FullFilePath()
+                                        .LoadFile();
 
-                    TextDbHelpers.CleanUpDeletedRelationsInEntities(entities, e.DeletedId, columns);
+                        TextDbHelpers.CleanUpDeletedRelationsInEntities(entities, e.DeletedId, columns, ref deletedRealtions);
 
-                    File.WriteAllLines(textDbFile, entities);
+                        File.WriteAllLines(textDbFile, entities);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+
+                    e.DeletedRelations += deletedRealtions;
+                }
+                else
+                {
+                    e.DeletedRelations = 0;
+                    e.DeleteRelationsSucceded = true;
                 }
             }
-            e.DeleteRelationsSucceded = true;
+            e.DeletedRelations = deletedRealtions;
         }
 
         // TODO - Behöver jag båda två?

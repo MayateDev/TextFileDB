@@ -149,17 +149,6 @@ namespace TextDbLibrary.Classes
                     // TODO - Get refactoring working, move this to own method, problems with passing the obj object
                     if (obj as IEnumerable != null)
                     {
-                        // Working
-                        //obj = ((IEnumerable)obj).Cast<IEntity>().OrderBy(m => m.Id).ToList();
-
-                        //var idString = "";
-
-                        //foreach (var o in (IEnumerable)obj)
-                        //{
-                        //    idString += ((IEntity)o).Id.ToString() + "^";
-                        //}
-
-                        // Test code
                         obj = ((IEnumerable)obj).Cast<IEntity>();
                         var idString = "";
 
@@ -178,7 +167,6 @@ namespace TextDbLibrary.Classes
                                 idString += ((IPrimaryString)o).Id.ToString() + "^";
                             }
                         }
-                        // End
 
                         if (idString.Length > 0)
                         {
@@ -187,10 +175,6 @@ namespace TextDbLibrary.Classes
                     }
                     else
                     {
-                        // Working
-                        //value = ((IEntity)obj).Id.ToString();
-
-                        // Test code
                         var idString = "";
 
                         if (obj as IPrimaryInt != null)
@@ -204,7 +188,6 @@ namespace TextDbLibrary.Classes
                         }
 
                         value = idString;
-                        // End
                     }
                 }
                 else
@@ -280,16 +263,9 @@ namespace TextDbLibrary.Classes
             {
                 if (id != "")
                 {
-                    // Working
-                    //var obj = relationshipList.FirstOrDefault(o => o.Id == int.Parse(id));
-
-                    //var addMethod = objList.GetType().GetMethod("Add");
-                    //addMethod.Invoke(objList, new object[] { obj });
-
-                    // Test code
                     var addMethod = objList.GetType().GetMethod("Add");
 
-                    if (relationshipList.TryCast<IPrimaryInt>()) // && relationshipList.Count() > 0
+                    if (relationshipList.TryCast<IPrimaryInt>())
                     {
                         var tmpList = relationshipList.Cast<IPrimaryInt>().ToList();
                         var obj = tmpList.FirstOrDefault(o => o.Id == int.Parse(id));
@@ -297,15 +273,13 @@ namespace TextDbLibrary.Classes
                         addMethod.Invoke(objList, new object[] { obj });
                     }
 
-                    if (relationshipList.TryCast<IPrimaryString>()) // && relationshipList.Count() > 0
+                    if (relationshipList.TryCast<IPrimaryString>())
                     {
                         var tmpList = relationshipList.Cast<IPrimaryString>().ToList();
                         var obj = tmpList.FirstOrDefault(o => o.Id == id);
 
                         addMethod.Invoke(objList, new object[] { obj });
                     }
-                    // End
-
                 }
             }
 
@@ -326,12 +300,6 @@ namespace TextDbLibrary.Classes
             MethodInfo genericMethod = TextDbHelpers.CreateGenericMethodOfType(typeof(TextDbSchema), "GetAllRecordsFromTableAsEntities", returnType);
             IEnumerable<IEntity> relationshipList = TextDbHelpers.InvokeMethodAndCastResultToListOfIEntity(genericMethod, column.ToTable);
 
-            // Orginal
-            //var obj = relationshipList.FirstOrDefault(o => o.Id == int.Parse(columnValue));
-
-            //property.SetValue(entity, obj, null);
-
-            // Test code
             object obj = new object();
 
             if (relationshipList.TryCast<IPrimaryInt>() && (columnValue != null && columnValue != ""))
@@ -349,7 +317,6 @@ namespace TextDbLibrary.Classes
 
                 property.SetValue(entity, obj, null);
             }
-            // End
         }
 
         /// <summary>
@@ -358,8 +325,7 @@ namespace TextDbLibrary.Classes
         /// <param name="entities">Entities in table</param>
         /// <param name="deletedId">Id for the deleted entity</param>
         /// <param name="columns">Columns in the table</param>
-        //internal static void CleanUpDeletedRelationsInEntities(List<string> entities, int deletedId, List<IDbColumn> columns)
-        internal static void CleanUpDeletedRelationsInEntities(List<string> entities, string deletedId, List<IDbColumn> columns)
+        internal static void CleanUpDeletedRelationsInEntities(List<string> entities, string deletedId, List<IDbColumn> columns, ref int deletedRelations)
         {
             var csvHeaderLine = entities[0];
             entities.RemoveAt(0);
@@ -372,7 +338,8 @@ namespace TextDbLibrary.Classes
                     string[] cols = entities[i].Split(';');
                     List<string> relationsIds = cols[colPos].Split('^').ToList();
 
-                    relationsIds.RemoveAll(x => x == deletedId); //.ToString());
+                    deletedRelations += relationsIds.RemoveAll(x => x == deletedId);
+
                     var newRelationsString = "";
 
                     if (relationsIds.Count > 0)

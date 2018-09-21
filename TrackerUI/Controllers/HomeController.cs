@@ -71,9 +71,9 @@ namespace TrackerUI.Controllers
 
             //_teamService.Add(team);
 
-            //var p = _personService.Read("bfcf5e0c-64f8-448b-a30d-115f4756a60f");
+            var p = _personService.Read("bfcf5e0c-64f8-448b-a30d-115f4756a60f");
             //p.CellphoneNumber = "0700-00 13 37";
-            //p = _personService.Update(p);
+            _personService.Delete(p);
 
             //// SqlParser - Send a basic sqlstring and get a DataSet back with the results
 

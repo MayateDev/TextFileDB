@@ -30,10 +30,6 @@ namespace TextDbLibrary.Extensions
                 .FullFilePath()
                 .LoadFile();
 
-            // Working
-            // entity.Id = tblSet.GetNewId();
-
-            // Test code
             if (entity as IPrimaryInt != null)
             {
                 ((IPrimaryInt)entity).Id = tblSet.GetNewIntId();
@@ -43,7 +39,6 @@ namespace TextDbLibrary.Extensions
             {
                 ((IPrimaryString)entity).Id = tblSet.GetNewStringId();
             }
-            // End
 
             var entityString = TextDbHelpers.ConvertEntityToTextDbLine(entity, tblSet);
             entities.Add(entityString);
@@ -69,13 +64,6 @@ namespace TextDbLibrary.Extensions
                 .FullFilePath()
                 .LoadFile();
             
-            // Working
-            //int rowPos = FindRowNumberForId(entities, tblSet, id);
-            //var entity = TextDbHelpers.ConvertTextDbLineToEntity<T>(entities[rowPos], tblSet);
-
-            //return entity;
-
-            // Test code
             int rowPos;
 
             if (FindRowNumberForId(entities, tblSet, id, out rowPos))
@@ -88,7 +76,6 @@ namespace TextDbLibrary.Extensions
             {
                 return null;
             }
-            // End
         }
 
         /// <summary>
@@ -104,18 +91,7 @@ namespace TextDbLibrary.Extensions
             List<string> entities = tblSet.DbTextFile
                 .FullFilePath()
                 .LoadFile();
-            // Working
-            //var updateId = entity.Id;
 
-            //var rowPos = FindRowNumberForId(entities, tblSet, updateId);
-            //var entityString = TextDbHelpers.ConvertEntityToTextDbLine(entity, tblSet);
-            //entities[rowPos] = entityString;
-
-            //File.WriteAllLines(textDbFile, entities);
-
-            //return entity;
-
-            // Test code
             var rowPos = 0;
             var rowFound = false;
 
@@ -144,7 +120,6 @@ namespace TextDbLibrary.Extensions
             {
                 return null;
             }
-            // End
         }
 
         /// <summary>
@@ -177,22 +152,6 @@ namespace TextDbLibrary.Extensions
                 .FullFilePath()
                 .LoadFile();
 
-            // Working
-            //int currentPk = tblSet.GetNewId();
-
-            //for (var i = 0; i < entityList.Count; i++)
-            //{
-            //    entityList[i].Id = (currentPk + i);
-            //    entities.Add(TextDbHelpers.ConvertEntityToTextDbLine(entityList[i], tblSet));
-            //}
-
-            //File.WriteAllLines(textDbFile, entities);
-
-            //tblSet.SetNewPrimaryKeyInDbInfoFile(entityList.Count);
-
-            //return entityList;
-
-            // Test code
             if (((IEnumerable<IEntity>)entityList).TryCast<IPrimaryInt>())
             {
                 int currentPk = tblSet.GetNewIntId();
@@ -218,7 +177,6 @@ namespace TextDbLibrary.Extensions
             tblSet.SetNewPrimaryKeyInDbInfoFile(entityList.Count);
 
             return entityList;
-            // End
         }
 
         /// <summary>
@@ -234,27 +192,6 @@ namespace TextDbLibrary.Extensions
                 .FullFilePath()
                 .LoadFile();
 
-            // Working
-            //var deleteId = entity.Id;
-
-            //var rowPos = FindRowNumberForId(entities, tblSet, deleteId);
-            //entities.RemoveAt(rowPos);
-
-            //var eventArgs = new EntityDeletedEventArgs(deleteId, tblSet.EntityType);
-
-            //EntityDeletedFromFileEvent?.Invoke(null, eventArgs);
-
-            //if (eventArgs.DeleteRelationsSucceded)
-            //{
-            //    File.WriteAllLines(textDbFile, entities);
-            //}
-            //else
-            //{
-            //    throw new OperationCanceledException("Something went wrong when trying to delete relationships in tables.");
-            //}
-
-
-            // Test code
             var eventArgs = new EntityDeletedEventArgs();
             var deleteId = "";
 
@@ -277,7 +214,14 @@ namespace TextDbLibrary.Extensions
             {
                 entities.RemoveAt(rowPos);
 
-                EntityDeletedFromFileEvent?.Invoke(null, eventArgs);
+                try
+                {
+                    EntityDeletedFromFileEvent?.Invoke(null, eventArgs);
+                }
+                catch (Exception ex)
+                {
+                    throw new OperationCanceledException("Something went wrong when trying to delete relationships in tables. Delete not performed.", ex);
+                }
 
                 if (eventArgs.DeleteRelationsSucceded)
                 {
@@ -285,8 +229,7 @@ namespace TextDbLibrary.Extensions
                 }
                 else
                 {
-                    //return false;
-                    throw new OperationCanceledException("Something went wrong when trying to delete relationships in tables.");
+                    throw new OperationCanceledException("Something went wrong when trying to delete relationships in tables. Delete not performed.");
                 }
 
                 return true;
@@ -312,7 +255,7 @@ namespace TextDbLibrary.Extensions
                 return column.ColumnPosition;
             }
 
-            throw new NullReferenceException("Table error. There is no column with the datatype of PrimaryKey in this table");
+            throw new NullReferenceException("Table error. There is no column with PrimaryKey in this table");
         }
 
         /// <summary>
@@ -322,7 +265,6 @@ namespace TextDbLibrary.Extensions
         /// <param name="tblSet"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        //private static int FindRowNumberForId<T>(List<string> entities, IDbTableSet tblSet, T id)
         private static bool FindRowNumberForId<T>(List<string> entities, IDbTableSet tblSet, T id, out int rowPos)
         {
             int colPos = CheckForIdColumnAndReturnPosition(tblSet);
@@ -340,7 +282,6 @@ namespace TextDbLibrary.Extensions
 
             rowPos = 0;
             return false;
-            //throw new NullReferenceException("Table error. There is no row with a id that matches in this table");
         }
     }
 }

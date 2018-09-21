@@ -18,5 +18,6 @@ namespace TextDbLibrary.Classes
         internal string DeletedId { get; private set; }
         internal Type DeletedType { get; private set; }
         internal bool DeleteRelationsSucceded { get; set; } = false;
+        internal int DeletedRelations { get; set; }
     }
 }
