@@ -128,24 +128,5 @@ namespace DataLibrary
         {
             this.Dispose();
         }
-
-        //public IDbTableSet TeamsTbl
-        //{
-        //    get
-        //    {
-        //        var tblSet = new DbTableSet<TeamModel>();
-
-        //        tblSet.Columns = new List<IDbColumn>
-        //        {
-        //            new DbParseableColumn<int> { ColumnName = "Id", ColumnPosition = 0, DataType = ColumnDataType.IntType },
-        //            new DbRelationshipColumn { ColumnName = "TeamMembers", ColumnPosition = 1, DataType = ColumnDataType.MultipleRelationships, ToTable = "PersonsTbl", RelationshipReturnType = typeof(PersonModel) },
-        //            new DbColumn { ColumnName = "TeamName", ColumnPosition = 2, DataType = ColumnDataType.StringType }
-        //        };
-        //        tblSet.DbTextFile = "TeamModels.csv";
-        //        tblSet.TableName = "TeamsTbl";
-
-        //        return tblSet;
-        //    }
-        //}
     }
 }

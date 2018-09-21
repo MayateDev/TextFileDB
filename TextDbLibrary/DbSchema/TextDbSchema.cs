@@ -97,7 +97,7 @@ namespace TextDbLibrary.DbSchema
         {
             TextDbHelpers.CreateTextDataFilesIfNotExists(SchemaTables);
             TextDbHelpers.WriteNewDbInfoFile(SchemaTables);
-            TextDbTableActions.EntityDeletedFromFileEvent += TextDbTableActions_EntityDeletedFromFileEvent;
+            DbTableActions.EntityDeletedFromFileEvent += TextDbTableActions_EntityDeletedFromFileEvent;
         }
 
         // vid problem testa att skapa private static bool subscribed för att hålla koll om event är reggat

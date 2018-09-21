@@ -9,7 +9,7 @@ using TextDbLibrary.Interfaces;
 
 namespace TextDbLibrary.Extensions
 {
-    public static class TextDbTableActions
+    public static class DbTableActions
     {
         /// <summary>
         /// Event to handle deletion of relationship to deleted entity in all tables
@@ -238,7 +238,6 @@ namespace TextDbLibrary.Extensions
             {
                 return false;
             }
-            // End
         }
 
         /// <summary>

@@ -55,10 +55,10 @@
     <Compile Include="TableClasses\DbPrimaryKeyColumn.cs" />
     <Compile Include="TableClasses\DbRelationshipColumn.cs" />
     <Compile Include="TableClasses\DbTableSet.cs" />
-    <Compile Include="Classes\ModelDeletedEventArgs.cs" />
+    <Compile Include="Classes\EntityDeletedEventArgs.cs" />
     <Compile Include="Classes\SqlParser.cs" />
     <Compile Include="Classes\TextDbHelpers.cs" />
-    <Compile Include="Extensions\TextDbTableActions.cs" />
+    <Compile Include="Extensions\DbTableActions.cs" />
     <Compile Include="DbSchema\TextDbSchema.cs" />
     <Compile Include="Enums\ColumnDataType.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
