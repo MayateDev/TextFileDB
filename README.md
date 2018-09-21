@@ -94,11 +94,11 @@ public IDbTableSet PersonsTbl
     {
         IReadOnlyList<IDbColumn> columns = new List<IDbColumn>
         {
-            new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.IntType),
-            new DbColumn("FirstName", 1, ColumnDataType.StringType),
-            new DbColumn("LastName", 2, ColumnDataType.StringType),
-            new DbColumn("EmailAddress", 3, ColumnDataType.StringType),
-            new DbColumn("CellphoneNumber", 4, ColumnDataType.StringType),
+            new DbPrimaryKeyColumn<int>("Id", 0, ColumnDataType.Int),
+            new DbColumn("FirstName", 1, ColumnDataType.String),
+            new DbColumn("LastName", 2, ColumnDataType.String),
+            new DbColumn("EmailAddress", 3, ColumnDataType.String),
+            new DbColumn("CellphoneNumber", 4, ColumnDataType.String),
             new DbParseableColumn<DateTime>("CreateDate", 5, ColumnDataType.DateTime),
             new DbRelationshipColumn("Prize", 5, ColumnDataType.MultipleRelationships, typeof(Prize), "PrizesTbl")
         };
