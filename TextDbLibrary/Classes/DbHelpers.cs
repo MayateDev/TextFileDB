@@ -1,5 +1,4 @@
-﻿//using DomainLibrary.Interfaces;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -126,6 +125,13 @@ namespace TextDbLibrary.Classes
             return Activator.CreateInstance(baseType.MakeGenericType(genericType));
         }
 
+        /// <summary>
+        /// Generates a ^ delimited string for the relationships
+        /// </summary>
+        /// <typeparam name="T">Type of entity</typeparam>
+        /// <param name="property">Property on the entity with the relatonships in it</param>
+        /// <param name="entity">Entity with the relationship property we want</param>
+        /// <param name="value">Reference string that will hold the string of relationships</param>
         private static void GenerateRelationsStringForDbFile<T>(PropertyInfo property, T entity, ref string value)
         {
             var obj = property.GetValue(entity);
