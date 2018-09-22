@@ -47,78 +47,7 @@ namespace TextDbLibrary.Classes
                 var property = entity.GetType().GetProperty(c.ColumnName, BindingFlags.Public | BindingFlags.Instance);
                 if (property != null && property.CanWrite)
                 {
-                    switch (c.DataType)
-                    {
-                        case ColumnDataType.Int:
-                            if (c as IDbParseableColumn<int> != null)
-                            {
-                                var column = c as IDbParseableColumn<int>;
-
-                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
-                            }
-                            else if (c as IDbPrimaryKeyColumn<int> != null)
-                            {
-                                var column = c as IDbParseableColumn<int>;
-
-                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
-                            }
-                            break;
-                        case ColumnDataType.Double:
-                            if (c as IDbParseableColumn<double> != null)
-                            {
-                                var column = c as IDbParseableColumn<double>;
-
-                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition].Replace('.', ',')), null);
-                            }
-                            break;
-                        case ColumnDataType.Decimal:
-                            if (c as IDbParseableColumn<decimal> != null)
-                            {
-                                var column = c as IDbParseableColumn<decimal>;
-
-                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition].Replace('.', ',')), null);
-                            }
-                            break;
-                        case ColumnDataType.String:
-                            if (c as IDbPrimaryKeyColumn<string> != null)
-                            {
-                                var column = c as IDbParseableColumn<string>;
-
-                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
-                            }
-                            else
-                            {
-                                property.SetValue(entity, cols[c.ColumnPosition], null);
-                            }
-                            break;
-                        case ColumnDataType.DateTime:
-                            if (c as IDbParseableColumn<DateTime> != null)
-                            {
-                                var column = c as IDbParseableColumn<DateTime>;
-
-                                property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
-                            }
-                            break;
-                        case ColumnDataType.SingleRelationship:
-                            if (c as IDbRelationshipColumn != null)
-                            {
-                                var column = c as IDbRelationshipColumn;
-
-                                DbHelpers.SetSingleRelationshipPropertyOnEntity(column, cols, property, entity);
-                            }
-                            break;
-                        case ColumnDataType.MultipleRelationships:
-                            if (c as IDbRelationshipColumn != null)
-                            {
-                                var column = c as IDbRelationshipColumn;
-
-                                DbHelpers.SetMultipleRelatinshipPropertyOnEntity(column, cols, property, entity);
-                            }
-                            break;
-                        default:
-                            property.SetValue(entity, cols[c.ColumnPosition], null);
-                            break;
-                    }
+                    SetPropertyOnEntity(ref property, ref entity, c, cols);
                 }
             }
             return entity;
@@ -242,6 +171,90 @@ namespace TextDbLibrary.Classes
                 }
 
                 value = idString;
+            }
+        }
+
+        /// <summary>
+        /// Sets the property on entity
+        /// </summary>
+        /// <typeparam name="T">Type of entity</typeparam>
+        /// <param name="property">Property of entity we are trying to set</param>
+        /// <param name="entity">Entity that we are settting the property on</param>
+        /// <param name="c">IDbColumn with column info</param>
+        /// <param name="cols">Row we are converting to entity in string[] format</param>
+        internal static void SetPropertyOnEntity<T>(ref PropertyInfo property, ref T entity, IDbColumn c, string[] cols)
+        {
+            switch (c.DataType)
+            {
+                case ColumnDataType.Int:
+                    if (c as IDbParseableColumn<int> != null)
+                    {
+                        var column = c as IDbParseableColumn<int>;
+
+                        property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
+                    }
+                    else if (c as IDbPrimaryKeyColumn<int> != null)
+                    {
+                        var column = c as IDbParseableColumn<int>;
+
+                        property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
+                    }
+                    break;
+                case ColumnDataType.Double:
+                    if (c as IDbParseableColumn<double> != null)
+                    {
+                        var column = c as IDbParseableColumn<double>;
+
+                        property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition].Replace('.', ',')), null);
+                    }
+                    break;
+                case ColumnDataType.Decimal:
+                    if (c as IDbParseableColumn<decimal> != null)
+                    {
+                        var column = c as IDbParseableColumn<decimal>;
+
+                        property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition].Replace('.', ',')), null);
+                    }
+                    break;
+                case ColumnDataType.String:
+                    if (c as IDbPrimaryKeyColumn<string> != null)
+                    {
+                        var column = c as IDbParseableColumn<string>;
+
+                        property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
+                    }
+                    else
+                    {
+                        property.SetValue(entity, cols[c.ColumnPosition], null);
+                    }
+                    break;
+                case ColumnDataType.DateTime:
+                    if (c as IDbParseableColumn<DateTime> != null)
+                    {
+                        var column = c as IDbParseableColumn<DateTime>;
+
+                        property.SetValue(entity, column.ParseColumn(cols[column.ColumnPosition]), null);
+                    }
+                    break;
+                case ColumnDataType.SingleRelationship:
+                    if (c as IDbRelationshipColumn != null)
+                    {
+                        var column = c as IDbRelationshipColumn;
+
+                        DbHelpers.SetSingleRelationshipPropertyOnEntity(column, cols, property, entity);
+                    }
+                    break;
+                case ColumnDataType.MultipleRelationships:
+                    if (c as IDbRelationshipColumn != null)
+                    {
+                        var column = c as IDbRelationshipColumn;
+
+                        DbHelpers.SetMultipleRelatinshipPropertyOnEntity(column, cols, property, entity);
+                    }
+                    break;
+                default:
+                    property.SetValue(entity, cols[c.ColumnPosition], null);
+                    break;
             }
         }
 
@@ -376,7 +389,6 @@ namespace TextDbLibrary.Classes
             {
                 string tmp = line.Trim();
                 string tableName = "";
-                int pkCount = 0;
 
                 int tblNameEndPos = tmp.IndexOf(']');
                 tableName = tmp.Substring(1, tblNameEndPos - 1);
@@ -385,7 +397,7 @@ namespace TextDbLibrary.Classes
                 int pkEndPos = tmp.IndexOf(']', tblNameEndPos + 1);
                 string pkCurrent = tmp.Substring(pkStartPos, pkEndPos - pkStartPos);
 
-                if (int.TryParse(pkCurrent, out pkCount))
+                if (int.TryParse(pkCurrent, out int pkCount))
                 {
                     pkDict.Add(tableName, pkCount);
                 }
@@ -466,8 +478,10 @@ namespace TextDbLibrary.Classes
 
                 if (!File.Exists(textDbfile))
                 {
-                    List<string> lines = new List<string>();
-                    lines.Add(GenerateCsvHeader(tbl));
+                    List<string> lines = new List<string>
+                    {
+                        GenerateCsvHeader(tbl)
+                    };
 
                     File.WriteAllLines(textDbfile, lines);
                 }
