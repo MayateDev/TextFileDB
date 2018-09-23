@@ -226,6 +226,167 @@ namespace TextDbLibrary.Classes
         /// <param name="cols">Row in strng[] format</param>
         private void FormatConditionString(IReadOnlyList<IDbColumn> columns, ref string tmpConditionsString, string[] cols)
         {
+            var relationshipColumns = columns.Where(c => c as IDbRelationshipColumn != null).ToList();
+            var conditions = tmpConditionsString.Split(new string[] { "&&", "||", "&", "|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var andOrOperatorsString = "";
+
+            for (int i = 0; i < tmpConditionsString.Length; i++)
+            {
+                if (tmpConditionsString[i] == '&' || tmpConditionsString[i] == '&')
+                {
+                    andOrOperatorsString += tmpConditionsString[i];
+
+                    if (tmpConditionsString[i + 1] != tmpConditionsString[i])
+                    {
+                        andOrOperatorsString += " ";
+                    }
+                }
+            }
+
+            string[] andOrOperatorsArray;
+
+            if (andOrOperatorsString == "")
+            {
+                andOrOperatorsArray = new string[0];
+            }
+            else
+            {
+                andOrOperatorsArray = andOrOperatorsString.Split(' ');
+            }
+                
+            for (int i = 0; i < conditions.Count; i++)
+            {
+                foreach (var c in relationshipColumns)
+                {
+                    if (conditions[i].Contains("[" + c.ColumnName + "]"))
+                    {
+                        var relationships = cols[c.ColumnPosition];
+                        var relationshipsArray = relationships.Split('^');
+
+
+                        var startChar = "";
+                        var endChar = "";
+                        var value = conditions[i];
+
+                        if (value.StartsWith("("))
+                        {
+                            startChar = "(";
+                        }
+
+                        if (value.EndsWith(")"))
+                        {
+                            endChar = ")";
+                        }
+
+                        value = conditions[i].Replace("[" + c.ColumnName + "]", "")
+                            .Replace(" ", "")
+                            .Replace("(", "")
+                            .Replace(")", "");
+
+                        if (conditions[i].Contains("=="))
+                        {
+                            value = value.Replace("==", "");
+
+                            if (relationshipsArray.Contains(value))
+                            {
+                                conditions[i] = startChar + "true" + endChar;
+                            }
+                            else
+                            {
+                                conditions[i] = startChar + "false" + endChar;
+                            }
+
+                        }
+                        else if (conditions[i].Contains("!="))
+                        {
+                            value = value.Replace("!=", "");
+
+                            if (relationshipsArray.Contains(value))
+                            {
+                                conditions[i] = startChar + "false" + endChar;
+                            }
+                            else
+                            {
+                                conditions[i] = startChar + "true" + endChar;
+                            }
+                        }
+                        else if (conditions[i].Contains("<="))
+                        {
+                            value = value.Replace("<=", "");
+
+                            int intValue = int.Parse(value);
+
+                            if (relationshipsArray.Count() <= intValue)
+                            {
+                                conditions[i] = startChar + "true" + endChar;
+                            }
+                            else
+                            {
+                                conditions[i] = startChar + "false" + endChar;
+                            }
+                        }
+                        else if (conditions[i].Contains(">="))
+                        {
+                            value = value.Replace(">=", "");
+
+                            int intValue = int.Parse(value);
+
+                            if (relationshipsArray.Count() >= intValue)
+                            {
+                                conditions[i] = startChar + "true" + endChar;
+                            }
+                            else
+                            {
+                                conditions[i] = startChar + "false" + endChar;
+                            }
+                        }
+                        else if (conditions[i].Contains(">"))
+                        {
+                            value = value.Replace(">", "");
+
+                            int intValue = int.Parse(value);
+
+                            if (relationshipsArray.Count() > intValue)
+                            {
+                                conditions[i] = startChar + "true" + endChar;
+                            }
+                            else
+                            {
+                                conditions[i] = startChar + "false" + endChar;
+                            }
+                        }
+                        else if (conditions[i].Contains("<"))
+                        {
+                            value = value.Replace("<", "");
+
+                            int intValue = int.Parse(value);
+
+                            if (relationshipsArray.Count() < intValue)
+                            {
+                                conditions[i] = startChar + "true" + endChar;
+                            }
+                            else
+                            {
+                                conditions[i] = startChar + "false" + endChar;
+                            }
+                        }
+                        //CheckRelationshipCondition(string condition);
+                    }
+                }
+            }
+
+            tmpConditionsString = "";
+
+            for (int i = 0; i < conditions.Count; i++)
+            {
+                tmpConditionsString += conditions[i].Trim();
+
+                if (andOrOperatorsArray.Length >= (i + 1))
+                {
+                    tmpConditionsString += " " + andOrOperatorsArray[i] + " ";
+                }
+            }
+
             // TODO - Check for relationship column, extract that and treat by its own
             foreach (var c in columns)
             {

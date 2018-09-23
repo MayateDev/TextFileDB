@@ -57,7 +57,7 @@ namespace TextDbLibrary.Extensions
         /// <param name="tblSet">Tableset we are working on</param>
         /// <param name="id">Id of the entity we want to get</param>
         /// <returns>Entity with the same id as requested</returns>
-        public static T Read<T, PK>(this IDbTableSet tblSet, PK id) where T : class, IEntity //, IPrimaryInt, IPrimaryString
+        public static T Read<T, PK>(this IDbTableSet tblSet, PK id) where T : class, IEntity
         {
             var textDbFile = tblSet.DbTextFile.FullFilePath();
             List<string> entities = tblSet.DbTextFile
