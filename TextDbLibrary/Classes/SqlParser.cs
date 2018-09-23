@@ -273,6 +273,11 @@ namespace TextDbLibrary.Classes
             }
         }
 
+        /// <summary>
+        /// Get the And & Or operators fron conditions string
+        /// </summary>
+        /// <param name="andOrOperatorsString">Variable we are setting string to</param>
+        /// <param name="tmpConditionsString">Conditionstring to get operators from</param>
         private static void GetAndOrOperators(ref string andOrOperatorsString, string tmpConditionsString)
         {
             for (int i = 0; i < tmpConditionsString.Length; i++)
@@ -289,6 +294,12 @@ namespace TextDbLibrary.Classes
             }
         }
 
+        /// <summary>
+        /// Looks for relationship columns in selected table
+        /// </summary>
+        /// <param name="conditions">List of conditions extracted from condition string</param>
+        /// <param name="relationshipColumns">Columns in table that is a relationship column</param>
+        /// <param name="cols">String array of the current row from database that we want to check if it matches the statement</param>
         private static void LookForAndEvaluateRealationshipConditions(ref List<string> conditions, List<IDbColumn> relationshipColumns, string[] cols)
         {
             for (int i = 0; i < conditions.Count; i++)
@@ -326,6 +337,15 @@ namespace TextDbLibrary.Classes
             }
         }
 
+        /// <summary>
+        /// Does the evaluation for each relationship column based on what operator is found in condition
+        /// </summary>
+        /// <param name="conditions">List of conditions extracted from condition string</param>
+        /// <param name="value">Value extracted from condition with operator</param>
+        /// <param name="i">Iterator from for loop in passing method</param>
+        /// <param name="relationshipsArray">An array of relationship ids</param>
+        /// <param name="startChar">If this is the first conditon in a ( x = 1 && x = 2 ) then a ( needs to be added to returned value</param>
+        /// <param name="endChar">If this is the last conditon in a ( x = 1 && x = 2 ) then a ) needs to be added to returned value</param>
         private static void DoRelationshipEvaluation(ref List<string> conditions, string value, int i, string[] relationshipsArray, string startChar, string endChar)
         {
             if (conditions[i].Contains("=="))
