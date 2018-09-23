@@ -9,7 +9,8 @@ using System;
 namespace TextDbLibrary.DbSchema
 {
     /// <summary>
-    /// Static class for setting upp the Schema for our TextDb
+    /// class to inherit from for setting upp the Schema where we define
+    /// our tables for the TextDb
     /// </summary>
     public class TextDbSchema
     {
