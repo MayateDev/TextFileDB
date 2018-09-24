@@ -331,7 +331,7 @@ namespace TextDbLibrary.Classes
                             .Replace("(", "")
                             .Replace(")", "");
 
-                        DoRelationshipEvaluation(ref conditions, value, i, relationshipsArray, startChar, endChar);
+                        DoRelationshipConditionEvaluation(ref conditions, value, i, relationshipsArray, startChar, endChar);
                     }
                 }
             }
@@ -346,7 +346,7 @@ namespace TextDbLibrary.Classes
         /// <param name="relationshipsArray">An array of relationship ids</param>
         /// <param name="startChar">If this is the first conditon in a ( x = 1 && x = 2 ) then a ( needs to be added to returned value</param>
         /// <param name="endChar">If this is the last conditon in a ( x = 1 && x = 2 ) then a ) needs to be added to returned value</param>
-        private static void DoRelationshipEvaluation(ref List<string> conditions, string value, int i, string[] relationshipsArray, string startChar, string endChar)
+        private static void DoRelationshipConditionEvaluation(ref List<string> conditions, string value, int i, string[] relationshipsArray, string startChar, string endChar)
         {
             if (conditions[i].Contains("=="))
             {
